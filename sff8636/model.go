@@ -82,7 +82,7 @@ type SFF8636 struct {
 	LaserWavelenToler [2]byte       `json:"laserWavelenToler"` // 187 - Wavelength tolerance or Copper Cable Attenuation
 	MaxCaseTempC      byte          `json:"maxCaseTempC"`      // 190 - Max case temp.
 	CcBase            byte          `json:"ccBase"`            // 191 - CC_BASE
-	LinkCodes         byte          `json:"linkCodes"`         // 192 - Link codes
+	LinkCodes         LinkCodes     `json:"linkCodes"`         // 192 - Link codes
 	Options           [3]byte       `json:"options"`           // 193-195 - Options
 	VendorSn          ByteString16  `json:"vendorSn"`          // 196-211 - Vendor SN
 	DateCode          DateCode      `json:"dateCode"`          // 212-219 - Date Code
