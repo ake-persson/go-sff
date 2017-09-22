@@ -1,6 +1,7 @@
 package sff8024
 
 import (
+	"encoding/hex"
 	"encoding/json"
 )
 
@@ -69,5 +70,10 @@ func (i Identifier) String() string {
 }
 
 func (i Identifier) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i.String())
+	b := []byte{byte(i)}
+	m := map[string]interface{}{
+		"name": i.String(),
+		"hex":  hex.EncodeToString(b),
+	}
+	return json.Marshal(m)
 }

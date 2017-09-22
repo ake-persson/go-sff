@@ -1,6 +1,7 @@
 package sff8636
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 )
@@ -85,5 +86,10 @@ func (e ExtIdentifier) MarshalJSON() ([]byte, error) {
 	if b&ExtPwrClassMask != ExtPwrClassUnused {
 		s = append(s, extPwrClassNames[b&ExtPwrClassMask])
 	}
-	return json.Marshal(s)
+
+	m := map[string]interface{}{
+		"names": s,
+		"hex":   hex.EncodeToString([]byte{b}),
+	}
+	return json.Marshal(m)
 }

@@ -1,6 +1,7 @@
 package sff8636
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -16,15 +17,23 @@ func (b ByteString2) String() string {
 }
 
 func (b ByteString2) MarshalJSON() ([]byte, error) {
-	return json.Marshal(b.String())
+	m := map[string]interface{}{
+		"name": b.String(),
+		"hex":  hex.EncodeToString([]byte(b[:2])),
+	}
+	return json.Marshal(m)
 }
 
 func (b ByteString16) String() string {
-	return strings.TrimSpace(string(b[0:16]))
+	return strings.TrimSpace(string(b[:16]))
 }
 
 func (b ByteString16) MarshalJSON() ([]byte, error) {
-	return json.Marshal(b.String())
+	m := map[string]interface{}{
+		"name": b.String(),
+		"hex":  hex.EncodeToString([]byte(b[:16])),
+	}
+	return json.Marshal(m)
 }
 
 func (v VendorOUI) String() string {
@@ -32,15 +41,23 @@ func (v VendorOUI) String() string {
 }
 
 func (v VendorOUI) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.String())
+	m := map[string]interface{}{
+		"name": v.String(),
+		"hex":  hex.EncodeToString([]byte(v[:3])),
+	}
+	return json.Marshal(m)
 }
 
 func (d DateCode) String() string {
-	return fmt.Sprintf("20%s-%s-%s", string(d[0:2]), string(d[2:4]), string(d[4:6]))
+	return fmt.Sprintf("20%s-%s-%s", string(d[:2]), string(d[2:4]), string(d[4:6]))
 }
 
 func (d DateCode) MarshalJSON() ([]byte, error) {
-	return json.Marshal(d.String())
+	m := map[string]interface{}{
+		"name": d.String(),
+		"hex":  hex.EncodeToString([]byte(d[:8])),
+	}
+	return json.Marshal(m)
 }
 
 type SFF8636 struct {
