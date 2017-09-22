@@ -1,6 +1,7 @@
 package sff8636
 
 import (
+	"encoding/hex"
 	"encoding/json"
 )
 
@@ -26,5 +27,9 @@ func (p PwrMode) String() string {
 }
 
 func (p PwrMode) MarshalJSON() ([]byte, error) {
-	return json.Marshal(p.String())
+	m := map[string]interface{}{
+		"name": p.String(),
+		"hex":  hex.EncodeToString([]byte{byte(p)}),
+	}
+	return json.Marshal(m)
 }

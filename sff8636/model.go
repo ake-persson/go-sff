@@ -62,7 +62,7 @@ func (d DateCode) MarshalJSON() ([]byte, error) {
 
 type SFF8636 struct {
 	ExtIdentifier     ExtIdentifier `json:"extIdentifier"`     // 129 - Ext. Identifier
-	ConnectorType     byte          `json:"connectorType"`     // 130 - Connector Type
+	ConnectorType     ConnectorType `json:"connectorType"`     // 130 - Connector Type
 	SpecComp          [8]byte       `json:"specComp"`          // 131-138 - Specification Compliance
 	Encoding          Encoding      `json:"encoding"`          // 139 - Encoding
 	BrNominal         byte          `json:"brNominal"`         // 140 - BR, nominal
