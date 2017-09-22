@@ -45,11 +45,13 @@ func main() {
 	}
 	fmt.Printf("Eeprom Size: %d\n", len(eeprom))
 
-	if len(eeprom) == 512 || len(eeprom) == 640 {
+	if len(eeprom) == 640 {
 		m := Module{
 			SFF8024: (*sff8024.SFF8024)(unsafe.Pointer(&eeprom[0])),
 			SFF8636: (*sff8636.SFF8636)(unsafe.Pointer(&eeprom[129])),
 		}
 		fmt.Printf("%s\n", m.JSONPretty())
+	} else {
+		log.Fatal("eeprom is not a SFF-8636")
 	}
 }
