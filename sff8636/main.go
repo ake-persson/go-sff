@@ -13,60 +13,61 @@ import (
 )
 
 const (
-	PwrClassMask  = 0xC0
-	FlagPwrClass1 = (0 << 6)
-	FlagPwrClass2 = (1 << 6)
-	FlagPwrClass3 = (2 << 6)
-	FlagPwrClass4 = (3 << 6)
+	PwrClassMask = 0xC0
+	PwrClass1    = (0 << 6)
+	PwrClass2    = (1 << 6)
+	PwrClass3    = (2 << 6)
+	PwrClass4    = (3 << 6)
 
-	ClieCodeMask   = 0x10
-	FlagNoClieCode = (0 << 4)
-	FlagClieCode   = (1 << 4)
+	ClieCodeMask = 0x10
+	NoClieCode   = (0 << 4)
+	ClieCode     = (1 << 4)
 
-	CdrInTxMask   = 0x08
-	FlagNoCdrInTx = (0 << 3)
-	FlagCdrInTx   = (1 << 3)
+	CdrInTxMask = 0x08
+	NoCdrInTx   = (0 << 3)
+	CdrInTx     = (1 << 3)
 
-	CdrInRxMask   = 0x04
-	FlagNoCdrInRx = (0 << 2)
-	FlagCdrInRx   = (1 << 2)
+	CdrInRxMask = 0x04
+	NoCdrInRx   = (0 << 2)
+	CdrInRx     = (1 << 2)
 
-	ExtPwrClassMask       = 0x03
-	FlagExtPwrClassUnused = 0
-	FlagExtPwrClass5      = 1
-	FlagExtPwrClass6      = 2
-	FlagExtPwrClass7      = 3
+	ExtPwrClassMask   = 0x03
+	ExtPwrClassUnused = 0
+	ExtPwrClass5      = 1
+	ExtPwrClass6      = 2
+	ExtPwrClass7      = 3
 )
 
 var pwrClassNames = map[byte]string{
-	FlagPwrClass1: "1.5 W max. power consumption",
-	FlagPwrClass2: "2.0 W max. power consumption",
-	FlagPwrClass3: "2.5 W max. power consumption",
-	FlagPwrClass4: "3.5 W max. power consumption",
+	PwrClass1: "1.5 W max. power consumption",
+	PwrClass2: "2.0 W max. power consumption",
+	PwrClass3: "2.5 W max. power consumption",
+	PwrClass4: "3.5 W max. power consumption",
 }
 
 var clieCodeNames = map[byte]string{
-	FlagNoClieCode: "No CLEI code present",
-	FlagClieCode:   "CLEI code present",
+	NoClieCode: "No CLEI code present",
+	ClieCode:   "CLEI code present",
 }
 
 var cdrInTxNames = map[byte]string{
-	FlagNoCdrInTx: "No CDR in TX",
-	FlagCdrInTx:   "CDR in TX",
+	NoCdrInTx: "No CDR in TX",
+	CdrInTx:   "CDR in TX",
 }
 
 var cdrInRxNames = map[byte]string{
-	FlagNoCdrInRx: "No CDR in RX",
-	FlagCdrInRx:   "CDR in RX",
+	NoCdrInRx: "No CDR in RX",
+	CdrInRx:   "CDR in RX",
 }
 
 var extPwrClassNames = map[byte]string{
-	FlagExtPwrClassUnused: "unused (legacy setting)",
-	FlagExtPwrClass5:      "4.0 W max. power consumption",
-	FlagExtPwrClass6:      "4.5 W max. power consumption",
-	FlagExtPwrClass7:      "5.0 W max. power consumption",
+	ExtPwrClassUnused: "unused (legacy setting)",
+	ExtPwrClass5:      "4.0 W max. power consumption",
+	ExtPwrClass6:      "4.5 W max. power consumption",
+	ExtPwrClass7:      "5.0 W max. power consumption",
 }
 
+type PwrMode byte
 type ExtIdentifier byte
 type ByteString2 [2]byte
 type ByteString16 [16]byte
@@ -78,7 +79,10 @@ func (e ExtIdentifier) String() string {
 	s := pwrClassNames[b&PwrClassMask] + "\n"
 	s += clieCodeNames[b&ClieCodeMask] + "\n"
 	s += cdrInTxNames[b&CdrInTxMask] + ", " + cdrInRxNames[b&CdrInRxMask] + "\n"
-	s += extPwrClassNames[b&ExtPwrClassMask] + "\n"
+
+	if b&ExtPwrClassMask != ExtPwrClassUnused {
+		s += extPwrClassNames[b&ExtPwrClassMask] + "\n"
+	}
 	return s
 }
 
@@ -101,7 +105,11 @@ func (d DateCode) String() string {
 type SFF8636 struct {
 	Identifier byte `json:"identifier"` // 0 - Identifier
 
-	padding [128]byte
+	padding1 [92]byte
+
+	PwrMode PwrMode `json:"pwrMode"` // 93 - Power Mode
+
+	padding2 [35]byte
 
 	ExtIdentifier     ExtIdentifier `json:"extIdentifier"`     // 129 - Ext. Identifier
 	ConnectorType     byte          `json:"connectorType"`     // 130 - Connector Type
