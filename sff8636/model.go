@@ -64,7 +64,7 @@ type SFF8636 struct {
 	ExtIdentifier     ExtIdentifier `json:"extIdentifier"`     // 129 - Ext. Identifier
 	ConnectorType     byte          `json:"connectorType"`     // 130 - Connector Type
 	SpecComp          [8]byte       `json:"specComp"`          // 131-138 - Specification Compliance
-	Encoding          byte          `json:"encoding"`          // 139 - Encoding
+	Encoding          Encoding      `json:"encoding"`          // 139 - Encoding
 	BrNominal         byte          `json:"brNominal"`         // 140 - BR, nominal
 	ExtRateSelComp    byte          `json:"extRateSelComp"`    // 141 - Extended Rate Select Compliance
 	LengthSmf         byte          `json:"lengthSmf"`         // 142 - Length (SMF)
