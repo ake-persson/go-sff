@@ -1,8 +1,47 @@
-package main
+package sff8636
 
 import (
 	"encoding/json"
+	"fmt"
+	"strings"
 )
+
+type ByteString2 [2]byte
+type ByteString16 [16]byte
+type VendorOUI [3]byte
+type DateCode [8]byte
+
+func (b ByteString2) String() string {
+	return strings.TrimSpace(string(b[0:2]))
+}
+
+func (b ByteString2) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.String())
+}
+
+func (b ByteString16) String() string {
+	return strings.TrimSpace(string(b[0:16]))
+}
+
+func (b ByteString16) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.String())
+}
+
+func (v VendorOUI) String() string {
+	return fmt.Sprintf("%x:%x:%x", v[0], v[1], v[2])
+}
+
+func (v VendorOUI) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.String())
+}
+
+func (d DateCode) String() string {
+	return fmt.Sprintf("20%s-%s-%s", string(d[0:2]), string(d[2:4]), string(d[4:6]))
+}
+
+func (d DateCode) MarshalJSON() ([]byte, error) {
+	return json.Marshal(d.String())
+}
 
 type SFF8636 struct {
 	ExtIdentifier     ExtIdentifier `json:"extIdentifier"`     // 129 - Ext. Identifier

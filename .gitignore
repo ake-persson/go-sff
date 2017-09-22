@@ -1,6 +1,6 @@
 .DS_Store
 *.swp
 
-output.hex
-output.txt
-sff8636/sff8636
+/output.hex
+/output.txt
+/go-sff

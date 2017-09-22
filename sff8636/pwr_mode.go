@@ -1,4 +1,4 @@
-package main
+package sff8636
 
 import (
 	"encoding/json"
