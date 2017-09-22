@@ -11,6 +11,8 @@ type ByteString2 [2]byte
 type ByteString16 [16]byte
 type VendorOUI [3]byte
 type DateCode [8]byte
+type LengthKm byte
+type LengthM byte
 
 func (b ByteString2) String() string {
 	return strings.TrimSpace(string(b[0:2]))
@@ -60,6 +62,30 @@ func (d DateCode) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
+func (l LengthKm) String() string {
+	return fmt.Sprintf("%d Km", l)
+}
+
+func (l LengthKm) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"name": l.String(),
+		"hex":  hex.EncodeToString([]byte{byte(l)}),
+	}
+	return json.Marshal(m)
+}
+
+func (l LengthM) String() string {
+	return fmt.Sprintf("%d m", l)
+}
+
+func (l LengthM) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"name": l.String(),
+		"hex":  hex.EncodeToString([]byte{byte(l)}),
+	}
+	return json.Marshal(m)
+}
+
 type SFF8636 struct {
 	ExtIdentifier     ExtIdentifier `json:"extIdentifier"`     // 129 - Ext. Identifier
 	ConnectorType     ConnectorType `json:"connectorType"`     // 130 - Connector Type
@@ -67,11 +93,11 @@ type SFF8636 struct {
 	Encoding          Encoding      `json:"encoding"`          // 139 - Encoding
 	BrNominal         byte          `json:"brNominal"`         // 140 - BR, nominal
 	ExtRateSelComp    byte          `json:"extRateSelComp"`    // 141 - Extended Rate Select Compliance
-	LengthSmf         byte          `json:"lengthSmf"`         // 142 - Length (SMF)
-	LengthOm3         byte          `json:"lengthOm3"`         // 143 - Length (OM3 50 um)
-	LengthOm2         byte          `json:"lengthOm2"`         // 144 - Length (OM2 50 um)
-	LengthOm1         byte          `json:"lengthOm1"`         // 145 - Length (OM1 62.5 um) or Copper Cable Attenuation
-	LengthCopr        byte          `json:"lengthCopr"`        // 146 - Length (passive copper or active cable or OM4 50 um)
+	LengthSmf         LengthKm      `json:"lengthSmf"`         // 142 - Length (SMF)
+	LengthOm3         LengthM       `json:"lengthOm3"`         // 143 - Length (OM3 50 um)
+	LengthOm2         LengthM       `json:"lengthOm2"`         // 144 - Length (OM2 50 um)
+	LengthOm1         LengthM       `json:"lengthOm1"`         // 145 - Length (OM1 62.5 um) or Copper Cable Attenuation
+	LengthCopr        LengthM       `json:"lengthCopr"`        // 146 - Length (passive copper or active cable or OM4 50 um)
 	DevTech           byte          `json:"devTech"`           // 147 - Device technology
 	Vendor            ByteString16  `json:"vendor"`            // 148-163 - Vendor name
 	ExtModule         byte          `json:"extModule"`         // 164 - Extended Module
