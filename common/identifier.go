@@ -1,4 +1,4 @@
-package sff8024
+package common
 
 import (
 	"encoding/hex"

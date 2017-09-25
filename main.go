@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,25 +9,10 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/mickep76/go-sff/sff8024"
+	"github.com/mickep76/go-sff/sff8079"
 	"github.com/mickep76/go-sff/sff8636"
 	"golang.org/x/crypto/ssh/terminal"
 )
-
-type Module struct {
-	*sff8024.SFF8024
-	*sff8636.SFF8636
-}
-
-func (m *Module) JSON() []byte {
-	b, _ := json.Marshal(m)
-	return b
-}
-
-func (m *Module) JSONPretty() []byte {
-	b, _ := json.MarshalIndent(m, "", "  ")
-	return b
-}
 
 func main() {
 	var b []byte
@@ -45,13 +29,14 @@ func main() {
 	}
 	fmt.Printf("Eeprom Size: %d\n", len(eeprom))
 
-	if len(eeprom) == 640 {
-		m := Module{
-			SFF8024: (*sff8024.SFF8024)(unsafe.Pointer(&eeprom[0])),
-			SFF8636: (*sff8636.SFF8636)(unsafe.Pointer(&eeprom[129])),
-		}
+	switch len(eeprom) {
+	case 256:
+		m := (*sff8079.SFF8079)(unsafe.Pointer(&eeprom[0]))
 		fmt.Printf("%s\n", m.JSONPretty())
-	} else {
-		log.Fatal("eeprom is not a SFF-8636")
+	case 640:
+		m := (*sff8636.SFF8636)(unsafe.Pointer(&eeprom[128]))
+		fmt.Printf("%s\n", m.JSONPretty())
+	default:
+		log.Fatal("unknown eeprom size: %d", len(eeprom))
 	}
 }

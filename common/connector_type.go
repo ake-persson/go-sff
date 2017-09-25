@@ -1,4 +1,4 @@
-package sff8636
+package common
 
 import (
 	"encoding/hex"
