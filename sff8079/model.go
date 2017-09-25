@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/mickep76/go-sff/common"
 	"strings"
+	"unsafe"
 )
 
 type String4 [4]byte
@@ -109,6 +110,14 @@ type SFF8079 struct {
 	CcExt           byte                 `json:"ccExt"`           // 95 - CC_EXT
 	VendorSpec      [32]byte             `json:"vendorSpec"`      // 96-127 - Vendor Specific
 	Reserved        [128]byte            `json:"reserved"`        // 128-255 - Reserved
+}
+
+func New(eeprom []byte) (*SFF8079, error) {
+	if len(eeprom) != 256 {
+		return nil, fmt.Errorf("incorrect size of eeprom for SFF-8079, should be 256 got: %d", len(eeprom))
+	}
+
+	return (*SFF8079)(unsafe.Pointer(&eeprom[0])), nil
 }
 
 func (s *SFF8079) JSON() []byte {

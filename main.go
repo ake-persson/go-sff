@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"unsafe"
 
 	"github.com/mickep76/go-sff/sff8079"
 	"github.com/mickep76/go-sff/sff8636"
@@ -31,10 +30,10 @@ func main() {
 
 	switch len(eeprom) {
 	case 256:
-		m := (*sff8079.SFF8079)(unsafe.Pointer(&eeprom[0]))
+		m, _ := sff8079.New(eeprom)
 		fmt.Printf("%s\n", m.JSONPretty())
 	case 640:
-		m := (*sff8636.SFF8636)(unsafe.Pointer(&eeprom[128]))
+		m, _ := sff8636.New(eeprom)
 		fmt.Printf("%s\n", m.JSONPretty())
 	default:
 		log.Fatal("unknown eeprom size: %d", len(eeprom))
