@@ -79,7 +79,7 @@ func (v ValueMBps) MarshalJSON() ([]byte, error) {
 // SFP/SFP+
 type SFF8079 struct {
 	Identifier      common.Identifier    `json:"identifier"`      // 0 - Identifier
-	ExtIdentifier   byte                 `json:"extIdentifier"`   // 1 - Ext. Identifier
+	ExtIdentifier   ExtIdentifier        `json:"extIdentifier"`   // 1 - Ext. Identifier
 	ConnectorType   common.ConnectorType `json:"connectorType"`   // 2 - Connector
 	Transc          [8]byte              `json:"transceiver"`     // 3-10 - Transceiver
 	Encoding        Encoding             `json:"encoding"`        // 11 - Encoding
