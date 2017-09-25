@@ -1,39 +1,11 @@
 package sff8079
 
 import (
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/mickep76/go-sff/common"
 	"unsafe"
 )
-
-type VendorOUI [3]byte
-type DateCode [8]byte
-
-func (v VendorOUI) String() string {
-	return fmt.Sprintf("%x:%x:%x", v[0], v[1], v[2])
-}
-
-func (v VendorOUI) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{
-		"name": v.String(),
-		"hex":  hex.EncodeToString([]byte(v[:3])),
-	}
-	return json.Marshal(m)
-}
-
-func (d DateCode) String() string {
-	return fmt.Sprintf("20%s-%s-%s", string(d[:2]), string(d[2:4]), string(d[4:6]))
-}
-
-func (d DateCode) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{
-		"name": d.String(),
-		"hex":  hex.EncodeToString([]byte(d[:8])),
-	}
-	return json.Marshal(m)
-}
 
 // SFP/SFP+
 type SFF8079 struct {
@@ -52,7 +24,7 @@ type SFF8079 struct {
 	Length50umM2    common.ValueM        `json:"length50umM2"`    // 19 - Length (50μm)
 	Vendor          common.String16      `json:"vendor"`          // 20-35 - Vendor name
 	TranscComp      byte                 `json:"transceiverComp"` // 36 - Transciever
-	VendorOui       VendorOUI            `json:"vendorOUI"`       // 37-39 - Vendor OUI
+	VendorOui       common.VendorOUI     `json:"vendorOUI"`       // 37-39 - Vendor OUI
 	VendorPn        common.String16      `json:"vendorPn"`        // 40-55 - Vendor PN
 	VendorRev       common.String4       `json:"vendorRev"`       // 56-59 - Vendor rev
 	LaserWavelength [2]byte              `json:"laserWavelength"` // 60-61 - Laser wavelength
@@ -62,7 +34,7 @@ type SFF8079 struct {
 	BrMax           byte                 `json:"brMax"`           // 66 - BR, max
 	BrMin           byte                 `json:"brMin"`           // 67 - BR, min
 	VendorSn        common.String16      `json:"vendorSn"`        // 68-83 - Vendor SN
-	DateCode        DateCode             `json:"dateCode"`        // 84-91 - Date code
+	DateCode        common.DateCode      `json:"dateCode"`        // 84-91 - Date code
 	DiagMonitType   byte                 `json:"diagMonitType"`   // 92 - Diagnostic Monitoring Type
 	EnhancedOpts    byte                 `json:"enhancedOpts"`    // 93 - Enhanced Options
 	Sff8472Comp     byte                 `json:"sff8472Comp"`     // 94 - SFF-8472 Compliance

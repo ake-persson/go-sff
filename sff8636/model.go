@@ -1,40 +1,12 @@
 package sff8636
 
 import (
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"unsafe"
 
 	"github.com/mickep76/go-sff/common"
 )
-
-type VendorOUI [3]byte
-type DateCode [8]byte
-
-func (v VendorOUI) String() string {
-	return fmt.Sprintf("%x:%x:%x", v[0], v[1], v[2])
-}
-
-func (v VendorOUI) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{
-		"name": v.String(),
-		"hex":  hex.EncodeToString([]byte(v[:3])),
-	}
-	return json.Marshal(m)
-}
-
-func (d DateCode) String() string {
-	return fmt.Sprintf("20%s-%s-%s", string(d[:2]), string(d[2:4]), string(d[4:6]))
-}
-
-func (d DateCode) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{
-		"name": d.String(),
-		"hex":  hex.EncodeToString([]byte(d[:8])),
-	}
-	return json.Marshal(m)
-}
 
 // QSFP/QSFP+
 type SFF8636 struct {
@@ -53,7 +25,7 @@ type SFF8636 struct {
 	DevTech           byte                 `json:"devTech"`           // 147 - Device technology
 	Vendor            common.String16      `json:"vendor"`            // 148-163 - Vendor name
 	ExtModule         byte                 `json:"extModule"`         // 164 - Extended Module
-	VendorOui         VendorOUI            `json:"vendorOui"`         // 165-167 - Vendor OUI
+	VendorOui         common.VendorOUI     `json:"vendorOui"`         // 165-167 - Vendor OUI
 	VendorPn          common.String16      `json:"vendorPn"`          // 168-183 - Vendor PN
 	VendorRev         common.String2       `json:"vendorRev"`         // 184-185 - Vendor rev
 	LaserWavelen      [2]byte              `json:"laserWavelen"`      // 186 - Wavelength or Copper Cable Attenuation
@@ -63,7 +35,7 @@ type SFF8636 struct {
 	LinkCodes         LinkCodes            `json:"linkCodes"`         // 192 - Link codes
 	Options           [3]byte              `json:"options"`           // 193-195 - Options
 	VendorSn          common.String16      `json:"vendorSn"`          // 196-211 - Vendor SN
-	DateCode          DateCode             `json:"dateCode"`          // 212-219 - Date Code
+	DateCode          common.DateCode      `json:"dateCode"`          // 212-219 - Date Code
 	DiagMonType       byte                 `json:"diagMonType"`       // 220 - Diagnostic Monitoring Type
 	EnhOptions        byte                 `json:"enhOptions"`        // 221 - Enhanced Options
 	BrNominalExt      byte                 `json:"brNominalExt"`      // 222 - BR, Nominal
