@@ -1,3 +1,0 @@
-- Create types per attr or String/ JSONMarshal func for whole struct
-- Embed { "hex": "", "name": "" } for each attr. or separate ket like identifierName
-- Fix SpecComp
