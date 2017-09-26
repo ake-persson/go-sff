@@ -21,12 +21,10 @@ func main() {
 		log.Fatalf("stdin is hungry, feed me")
 	}
 
-	// Decode hex
 	eeprom, err := hex.DecodeString(strings.TrimRight(string(b), "\n"))
 	if err != nil {
 		log.Fatalf("decode hex: %v", err)
 	}
-	fmt.Printf("Eeprom Size: %d\n", len(eeprom))
 
 	switch len(eeprom) {
 	case 256:
