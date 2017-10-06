@@ -1,8 +1,5 @@
 .DS_Store
 *.swp
 
-/sfp.hex
-/sfp.txt
-/qsfp.hex
-/qsfp.txt
 /go-sff
+/eeprom

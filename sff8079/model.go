@@ -12,7 +12,7 @@ type SFF8079 struct {
 	Identifier      common.Identifier    `json:"identifier"`      // 0 - Identifier
 	ExtIdentifier   ExtIdentifier        `json:"extIdentifier"`   // 1 - Ext. Identifier
 	ConnectorType   common.ConnectorType `json:"connectorType"`   // 2 - Connector
-	Transc          [8]byte              `json:"transceiver"`     // 3-10 - Transceiver
+	Transc          Transceiver          `json:"transceiver"`     // 3-10 - Transceiver
 	Encoding        Encoding             `json:"encoding"`        // 11 - Encoding
 	BrNominal       common.ValueMBps     `json:"brNominal`        // 12 - BR Nominal
 	RateId          byte                 `json:"rateId"`          // 13 - Rate ID
