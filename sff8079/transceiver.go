@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Specify in a multi byte context i.e. you can use the same name lookup
 const (
 	Ether10gBaseEr    = (1 << 7)
 	Ether10gBaseLrm   = (1 << 6)
@@ -31,6 +32,46 @@ const (
 	SonetOc3Long   = (1 << 2)
 	SonetOc3Inter  = (1 << 1)
 	SonetOc3Short  = (1 << 0)
+
+	EtherBasePx     = (1 << 7)
+	EtherBaseBx10   = (1 << 6)
+	Ether100BaseFx  = (1 << 5)
+	Ether100BaseLx  = (1 << 4)
+	Ether1000BaseT  = (1 << 3)
+	Ether1000BaseCx = (1 << 2)
+	Ether1000BaseLx = (1 << 1)
+	Ether1000BaseSx = (1 << 0)
+
+	FcVeryLongDist    = (1 << 7)
+	FcShortDist       = (1 << 6)
+	FcIntermDist      = (1 << 5)
+	FcLongDist        = (1 << 4)
+	FcMedDist         = (1 << 3)
+	FcShortwaveLaser  = (1 << 2)
+	FcLongwaveLaser   = (1 << 1)
+	FcElectrInterEncl = (1 << 0)
+
+	FcElecIntraEncl     = (1 << 7)
+	FcshortwaveWoOfc    = (1 << 6)
+	FcShortwaveLaserOfc = (1 << 5)
+	FcLongwaveLasterLl  = (1 << 4)
+	ActiveCable         = (1 << 3)
+	PassiveCable        = (1 << 2)
+	FcCopperBaseT       = (1 << 1)
+
+	FcTwinAxialPair = (1 << 7)
+	FcTwistedPair   = (1 << 6)
+	FcMiniCoaxMi    = (1 << 5)
+	FcVideoCoaxTv   = (1 << 4)
+	FcMultimodeM6   = (1 << 3)
+	FcMultimodeM5   = (1 << 2)
+	FcSingleMode    = (1 << 0)
+
+	Fc1200MbPerSec = (1 << 7)
+	Fc800MbPerSec  = (1 << 6)
+	Fc400MbPerSec  = (1 << 4)
+	Fc200MbPerSec  = (1 << 2)
+	Fc100MbPerSec  = (1 << 0)
 )
 
 var etherComplCodeNames = map[byte]string{
@@ -64,6 +105,56 @@ var sonetCodeNames = map[byte]string{
 	SonetOc3Short:  "SONET: OC-3, short reach",
 }
 
+var etherComplCodeNames2 = map[byte]string{
+	EtherBasePx:     "Ethernet: BASE-PX",
+	EtherBaseBx10:   "Ethernet: BASE-BX10",
+	Ether100BaseFx:  "Ethernet: 100BASE-FX",
+	Ether100BaseLx:  "Ethernet: 100BASE-LX/LX10",
+	Ether1000BaseT:  "Ethernet: 1000BASE-T",
+	Ether1000BaseCx: "Ethernet: 1000BASE-CX",
+	Ether1000BaseLx: "Ethernet: 1000BASE-LX",
+	Ether1000BaseSx: "Ethernet: 1000BASE-SX",
+}
+
+var fcLinkLengthNames = map[byte]string{
+	FcVeryLongDist:    "FC: very long distance (V)",
+	FcShortDist:       "FC: short distance (S)",
+	FcIntermDist:      "FC: intermediate distance (I)",
+	FcLongDist:        "FC: long distance (L)",
+	FcMedDist:         "FC: medium distance (M)",
+	FcShortwaveLaser:  "FC: Shortwave laser, linear Rx (SA)",
+	FcLongwaveLaser:   "FC: Longwave laser (LC)",
+	FcElectrInterEncl: "FC: Electrical inter-enclosure (EL)",
+}
+
+var fcCableNames = map[byte]string{
+	FcElecIntraEncl:     "FC: Electrical intra-enclosure (EL)",
+	FcshortwaveWoOfc:    "FC: Shortwave laser w/o OFC (SN)",
+	FcShortwaveLaserOfc: "FC: Shortwave laser with OFC (SL)",
+	FcLongwaveLasterLl:  "FC: Longwave laser (LL)",
+	ActiveCable:         "Active Cable",
+	PassiveCable:        "Passive Cable",
+	FcCopperBaseT:       "FC: Copper FC-BaseT",
+}
+
+var fcCableNames2 = map[byte]string{
+	FcTwinAxialPair: "FC: Twin Axial Pair (TW)",
+	FcTwistedPair:   "FC: Twisted Pair (TP)",
+	FcMiniCoaxMi:    "FC: Miniature Coax (MI)",
+	FcVideoCoaxTv:   "FC: Video Coax (TV)",
+	FcMultimodeM6:   "FC: Multimode, 62.5um (M6)",
+	FcMultimodeM5:   "FC: Multimode, 50um (M5)",
+	FcSingleMode:    "FC: Single Mode (SM)",
+}
+
+var fcCacbleSpeedNames = map[byte]string{
+	Fc1200MbPerSec: "FC: 1200 MBytes/sec",
+	Fc800MbPerSec:  "FC: 800 MBytes/sec",
+	Fc400MbPerSec:  "FC: 400 MBytes/sec",
+	Fc200MbPerSec:  "FC: 200 MBytes/sec",
+	Fc100MbPerSec:  "FC: 100 MBytes/sec",
+}
+
 type Transceiver [8]byte
 
 func (t Transceiver) List() []string {
@@ -84,6 +175,41 @@ func (t Transceiver) List() []string {
 
 	b = byte(t[2])
 	for k, v := range sonetCodeNames {
+		if k&b != 0 {
+			r = append(r, v)
+		}
+	}
+
+	b = byte(t[3])
+	for k, v := range etherComplCodeNames2 {
+		if k&b != 0 {
+			r = append(r, v)
+		}
+	}
+
+	b = byte(t[4])
+	for k, v := range fcLinkLengthNames {
+		if k&b != 0 {
+			r = append(r, v)
+		}
+	}
+
+	b = byte(t[5])
+	for k, v := range fcCableNames {
+		if k&b != 0 {
+			r = append(r, v)
+		}
+	}
+
+	b = byte(t[6])
+	for k, v := range fcCableNames2 {
+		if k&b != 0 {
+			r = append(r, v)
+		}
+	}
+
+	b = byte(t[7])
+	for k, v := range fcCacbleSpeedNames {
 		if k&b != 0 {
 			r = append(r, v)
 		}
