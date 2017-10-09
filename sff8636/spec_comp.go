@@ -1,10 +1,9 @@
 package sff8636
 
-// INCORRECT!?!
-
 import (
 	"encoding/hex"
 	"encoding/json"
+	"strings"
 )
 
 const (
@@ -30,28 +29,24 @@ var specCompNames = map[byte]string{
 
 type SpecComp [8]byte
 
-func (s SpecComp) String() string {
-	r := ""
+func (s SpecComp) List() []string {
+	b := byte(s[0])
+	r := []string{}
 	for k, v := range specCompNames {
-		b := byte(s[0])
 		if k&b != 0 {
-			r += v + "\n"
+			r = append(r, v)
 		}
 	}
 	return r
 }
 
-func (s SpecComp) MarshalJSON() ([]byte, error) {
-	r := []string{}
-	for k, v := range specCompNames {
-		b := byte(s[0])
-		if k&b != 0 {
-			r = append(r, v)
-		}
-	}
+func (s SpecComp) String() string {
+	return strings.Join(s.List(), "\n")
+}
 
+func (s SpecComp) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"names": r,
+		"names": s.List(),
 		"hex":   hex.EncodeToString([]byte(s[:8])),
 	}
 	return json.Marshal(m)

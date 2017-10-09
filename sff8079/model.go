@@ -7,7 +7,6 @@ import (
 	"unsafe"
 )
 
-// SFP/SFP+
 type SFF8079 struct {
 	Identifier      common.Identifier    `json:"identifier"`      // 0 - Identifier
 	ExtIdentifier   ExtIdentifier        `json:"extIdentifier"`   // 1 - Ext. Identifier

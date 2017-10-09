@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -63,19 +64,7 @@ var extPwrClassNames = map[byte]string{
 
 type ExtIdentifier byte
 
-func (e ExtIdentifier) String() string {
-	b := byte(e)
-	s := pwrClassNames[b&PwrClassMask] + "\n"
-	s += clieCodeNames[b&ClieCodeMask] + "\n"
-	s += cdrInTxNames[b&CdrInTxMask] + ", " + cdrInRxNames[b&CdrInRxMask]
-
-	if b&ExtPwrClassMask != ExtPwrClassUnused {
-		s += "\n" + extPwrClassNames[b&ExtPwrClassMask]
-	}
-	return s
-}
-
-func (e ExtIdentifier) MarshalJSON() ([]byte, error) {
+func (e ExtIdentifier) List() []string {
 	b := byte(e)
 	s := []string{
 		pwrClassNames[b&PwrClassMask],
@@ -87,8 +76,17 @@ func (e ExtIdentifier) MarshalJSON() ([]byte, error) {
 		s = append(s, extPwrClassNames[b&ExtPwrClassMask])
 	}
 
+	return s
+}
+
+func (e ExtIdentifier) String() string {
+	return strings.Join(e.List(), "\n")
+}
+
+func (e ExtIdentifier) MarshalJSON() ([]byte, error) {
+	b := byte(e)
 	m := map[string]interface{}{
-		"names": s,
+		"names": e.List(),
 		"hex":   hex.EncodeToString([]byte{b}),
 	}
 	return json.Marshal(m)
