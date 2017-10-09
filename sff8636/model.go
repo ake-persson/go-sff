@@ -8,7 +8,7 @@ import (
 	"github.com/mickep76/go-sff/common"
 )
 
-type SFF8636 struct {
+type Sff8636 struct {
 	Identifier        common.Identifier    `json:"identifier"`        // 128 - Identifier
 	ExtIdentifier     ExtIdentifier        `json:"extIdentifier"`     // 129 - Ext. Identifier
 	ConnectorType     common.ConnectorType `json:"connectorType"`     // 130 - Connector Type
@@ -42,20 +42,24 @@ type SFF8636 struct {
 	VendorSpec        [32]byte             `json:"vendorSpec"`        // 224-255 - Vendor Specific
 }
 
-func New(eeprom []byte) (*SFF8636, error) {
+func New(eeprom []byte) (*Sff8636, error) {
 	if len(eeprom) != 640 {
 		return nil, fmt.Errorf("incorrect size of eeprom for SFF-8636, should be 640 got: %d", len(eeprom))
 	}
 
-	return (*SFF8636)(unsafe.Pointer(&eeprom[128])), nil
+	return (*Sff8636)(unsafe.Pointer(&eeprom[128])), nil
 }
 
-func (s *SFF8636) JSON() []byte {
+func (s *Sff8636) String() string {
+	return ""
+}
+
+func (s *Sff8636) JSON() []byte {
 	b, _ := json.Marshal(s)
 	return b
 }
 
-func (s *SFF8636) JSONPretty() []byte {
+func (s *Sff8636) JSONPretty() []byte {
 	b, _ := json.MarshalIndent(s, "", "  ")
 	return b
 }

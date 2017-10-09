@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-type SFF8079 struct {
+type Sff8079 struct {
 	Identifier      common.Identifier    `json:"identifier"`      // 0 - Identifier
 	ExtIdentifier   ExtIdentifier        `json:"extIdentifier"`   // 1 - Ext. Identifier
 	ConnectorType   common.ConnectorType `json:"connectorType"`   // 2 - Connector
@@ -42,20 +42,24 @@ type SFF8079 struct {
 	Reserved        [128]byte            `json:"reserved"`        // 128-255 - Reserved
 }
 
-func New(eeprom []byte) (*SFF8079, error) {
+func New(eeprom []byte) (*Sff8079, error) {
 	if len(eeprom) != 256 {
 		return nil, fmt.Errorf("incorrect size of eeprom for SFF-8079, should be 256 got: %d", len(eeprom))
 	}
 
-	return (*SFF8079)(unsafe.Pointer(&eeprom[0])), nil
+	return (*Sff8079)(unsafe.Pointer(&eeprom[0])), nil
 }
 
-func (s *SFF8079) JSON() []byte {
+func (s *Sff8079) String() string {
+	return ""
+}
+
+func (s *Sff8079) JSON() []byte {
 	b, _ := json.Marshal(s)
 	return b
 }
 
-func (s *SFF8079) JSONPretty() []byte {
+func (s *Sff8079) JSONPretty() []byte {
 	b, _ := json.MarshalIndent(s, "", "  ")
 	return b
 }
