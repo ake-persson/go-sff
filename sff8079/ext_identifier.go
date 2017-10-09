@@ -22,7 +22,7 @@ type ExtIdentifier byte
 func (e ExtIdentifier) String() string {
 	n, ok := extIdentifierNames[byte(e)]
 	if !ok {
-		return "unknown"
+		return "Unknown"
 	}
 	return n
 }
