@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mickep76/go-sff"
 	"github.com/mickep76/go-sff/sff8079"
 	"github.com/mickep76/go-sff/sff8636"
 	"golang.org/x/crypto/ssh/terminal"
@@ -26,14 +27,14 @@ func main() {
 		log.Fatalf("decode hex: %v", err)
 	}
 
-	switch len(eeprom) {
-	case 256:
+	switch sff.GetType(eeprom) {
+	case sff.TypeSff8079:
 		m, _ := sff8079.New(eeprom)
 		fmt.Printf("%s\n", m.JSONPretty())
-	case 640:
+	case sff.TypeSff8636:
 		m, _ := sff8636.New(eeprom)
 		fmt.Printf("%s\n", m.JSONPretty())
 	default:
-		log.Fatal("unknown eeprom size: %d", len(eeprom))
+		log.Fatal("unknown eeprom type")
 	}
 }

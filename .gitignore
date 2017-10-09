@@ -1,5 +1,5 @@
 .DS_Store
 *.swp
 
-/go-sff
+/example/example
 /eeprom
