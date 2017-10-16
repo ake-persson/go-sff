@@ -53,22 +53,27 @@ func New(eeprom []byte) (*Sff8079, error) {
 
 // Use Go text template?
 func (s *Sff8079) String() string {
-	return "Identifier:\t\t" + s.Identifier.String() +
-		"\nExt. Identifier:\t" + s.ExtIdentifier.String() +
-		"\nConnector Type:\t\t" + s.ConnectorType.String() +
-		"\nTransceiver:\n\t\t\t" + strings.Join(s.Transceiver.List(), "\n\t\t\t") + "\n" +
-		"\nEncoding:\t\t" + s.Encoding.String() +
-		"\nBR Nominal:\t\t" + s.BrNominal.String() +
-		"\nLength (SMF):\t\t" + s.LengthSmfKm.String() +
-		"\nLength (SMF):\t\t" + s.LengthSmfM.String() +
-		"\nLength (50um):\t\t" + s.Length50umM.String() +
-		"\nLength (62.5um):\t" + s.Length625umM.String() +
-		"\nLength (Copper):\t" + s.LengthCopper.String() +
-		"\nLength (OM3):\t\t" + s.LengthOm3.String() +
-		"\nVendor:\t\t" + s.Vendor.String() +
-		"\nVendor OUI:\t\t" + s.VendorOui.String() +
-		"\nVendor PN:\t\t" + s.VendorPn.String() +
-		"\nVendor Rev:\t\t" + s.VendorRev.String()
+	f := "%-25s : 0x%02x (%s)\n"
+
+	return fmt.Sprintf(f, "Identifier", byte(s.Identifier), s.Identifier) +
+		fmt.Sprintf(f, "Extended Identifier", byte(s.ExtIdentifier), s.ExtIdentifier) +
+		fmt.Sprintf(f, "Connector", byte(s.ConnectorType), s.ConnectorType) +
+		fmt.Sprintf("%-25s : 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\n", "Transceiver Codes", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]) +
+		fmt.Sprintf("%-25s : %s\n", "Transceiver Type", strings.Join(s.Transceiver.List(), fmt.Sprintf("\n%-25s : ", " "))) +
+		fmt.Sprintf(f, "Encoding", byte(s.Encoding), s.Encoding) +
+		fmt.Sprintf("%-25s : %s\n", "BR Nominal", s.BrNominal) +
+		fmt.Sprintf("%-25s : %s\n", "Length (SMF)", s.LengthSmfKm.String()) +
+		fmt.Sprintf("%-25s : %s\n", "Length (SMF)", s.LengthSmfM) +
+		fmt.Sprintf("%-25s : %s\n", "Length (50um)", s.Length50umM) +
+		fmt.Sprintf("%-25s : %s\n", "Length (62.5um)", s.Length625umM) +
+		fmt.Sprintf("%-25s : %s\n", "Length (Copper)", s.LengthCopper) +
+		fmt.Sprintf("%-25s : %s\n", "Length (OM3)", s.LengthOm3) +
+		fmt.Sprintf("%-25s : %s\n", "Vendor", s.Vendor) +
+		fmt.Sprintf("%-25s : %s\n", "Vendor OUI", s.VendorOui) +
+		fmt.Sprintf("%-25s : %s\n", "Vendor PN", s.VendorPn) +
+		fmt.Sprintf("%-25s : %s\n", "Vendor Rev", s.VendorRev) +
+		fmt.Sprintf("%-25s : %s\n", "Vendor SN", s.VendorSn) +
+		fmt.Sprintf("%-25s : %s\n", "Date Code", s.DateCode)
 }
 
 func (s *Sff8079) JSON() []byte {

@@ -65,7 +65,7 @@ func (v ValueM) MarshalJSON() ([]byte, error) {
 }
 
 func (v ValueKm) String() string {
-	return fmt.Sprintf("%d Km", v)
+	return fmt.Sprintf("%d km", v)
 }
 
 func (v ValueKm) MarshalJSON() ([]byte, error) {
@@ -73,11 +73,11 @@ func (v ValueKm) MarshalJSON() ([]byte, error) {
 }
 
 func (v ValueMBps) String() string {
-	return fmt.Sprintf("%d MBps", v)
+	return fmt.Sprintf("%d mbps", v)
 }
 
 func (v ValueMBps) MarshalJSON() ([]byte, error) {
-	return valueToJSON(byte(v), "MBps")
+	return valueToJSON(byte(v), "mbps")
 }
 
 type VendorOUI [3]byte
