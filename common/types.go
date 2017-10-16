@@ -46,6 +46,7 @@ func (s String16) MarshalJSON() ([]byte, error) {
 type ValueM byte
 type ValueKm byte
 type ValueMBps byte
+type ValuePerc byte
 
 func valueToJSON(b byte, unit string) ([]byte, error) {
 	m := map[string]interface{}{
@@ -69,7 +70,7 @@ func (v ValueKm) String() string {
 }
 
 func (v ValueKm) MarshalJSON() ([]byte, error) {
-	return valueToJSON(byte(v), "Km")
+	return valueToJSON(byte(v), "km")
 }
 
 func (v ValueMBps) String() string {
@@ -78,6 +79,14 @@ func (v ValueMBps) String() string {
 
 func (v ValueMBps) MarshalJSON() ([]byte, error) {
 	return valueToJSON(byte(v), "mbps")
+}
+
+func (v ValuePerc) String() string {
+	return fmt.Sprintf("%d %%", v)
+}
+
+func (v ValuePerc) MarshalJSON() ([]byte, error) {
+	return valueToJSON(byte(v), "%")
 }
 
 type VendorOUI [3]byte

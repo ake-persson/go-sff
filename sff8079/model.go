@@ -31,8 +31,8 @@ type Sff8079 struct {
 	Unallocated     byte                 `json:"unallocated"`     // 62 - Unallocated
 	CcBase          byte                 `json:"ccBase"`          // 63 - CC_BASE
 	Options         [2]byte              `json:"options"`         // 64-65 - Options
-	BrMax           byte                 `json:"brMax"`           // 66 - BR, max
-	BrMin           byte                 `json:"brMin"`           // 67 - BR, min
+	BrMax           common.ValuePerc     `json:"brMax"`           // 66 - BR, max
+	BrMin           common.ValuePerc     `json:"brMin"`           // 67 - BR, min
 	VendorSn        common.String16      `json:"vendorSn"`        // 68-83 - Vendor SN
 	DateCode        common.DateCode      `json:"dateCode"`        // 84-91 - Date code
 	DiagMonitType   byte                 `json:"diagMonitType"`   // 92 - Diagnostic Monitoring Type
@@ -61,7 +61,7 @@ func (s *Sff8079) String() string {
 		fmt.Sprintf("%-25s : 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\n", "Transceiver Codes", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]) +
 		fmt.Sprintf("%-25s : %s\n", "Transceiver Type", strings.Join(s.Transceiver.List(), fmt.Sprintf("\n%-25s : ", " "))) +
 		fmt.Sprintf(f, "Encoding", byte(s.Encoding), s.Encoding) +
-		fmt.Sprintf("%-25s : %s\n", "BR Nominal", s.BrNominal) +
+		fmt.Sprintf("%-25s : %s\n", "BR, Nominal", s.BrNominal) +
 		fmt.Sprintf("%-25s : %s\n", "Length (SMF)", s.LengthSmfKm.String()) +
 		fmt.Sprintf("%-25s : %s\n", "Length (SMF)", s.LengthSmfM) +
 		fmt.Sprintf("%-25s : %s\n", "Length (50um)", s.Length50umM) +
@@ -72,6 +72,9 @@ func (s *Sff8079) String() string {
 		fmt.Sprintf("%-25s : %s\n", "Vendor OUI", s.VendorOui) +
 		fmt.Sprintf("%-25s : %s\n", "Vendor PN", s.VendorPn) +
 		fmt.Sprintf("%-25s : %s\n", "Vendor Rev", s.VendorRev) +
+		fmt.Sprintf("%-25s : 0x%02x 0x%02x\n", "Option Values", s.Options[0], s.Options[1]) +
+		fmt.Sprintf("%-25s : %s\n", "BR Margin, Max", s.BrMax) +
+		fmt.Sprintf("%-25s : %s\n", "BR Margin, Min", s.BrMin) +
 		fmt.Sprintf("%-25s : %s\n", "Vendor SN", s.VendorSn) +
 		fmt.Sprintf("%-25s : %s\n", "Date Code", s.DateCode)
 }
