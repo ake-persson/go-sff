@@ -30,10 +30,10 @@ func main() {
 	switch sff.GetType(eeprom) {
 	case sff.TypeSff8079:
 		m, _ := sff8079.New(eeprom)
-		fmt.Printf("%s\n", m) //m.JSONPretty())
+		fmt.Printf("%s\n", m)
 	case sff.TypeSff8636:
 		m, _ := sff8636.New(eeprom)
-		fmt.Printf("%s\n", m.JSONPretty())
+		fmt.Printf("%s\n", m)
 	default:
 		log.Fatal("unknown eeprom type")
 	}

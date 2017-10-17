@@ -3,6 +3,7 @@ package sff8636
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"unsafe"
 
 	"github.com/mickep76/go-sff/common"
@@ -12,15 +13,15 @@ type Sff8636 struct {
 	Identifier        common.Identifier    `json:"identifier"`        // 128 - Identifier
 	ExtIdentifier     ExtIdentifier        `json:"extIdentifier"`     // 129 - Ext. Identifier
 	ConnectorType     common.ConnectorType `json:"connectorType"`     // 130 - Connector Type
-	SpecComp          SpecComp             `json:"specComp"`          // 131-138 - Specification Compliance
+	Transceiver       Transceiver          `json:"transceiver"`       // 131-138 - Specification Compliance
 	Encoding          Encoding             `json:"encoding"`          // 139 - Encoding
 	BrNominal         common.ValueMBps     `json:"brNominal"`         // 140 - BR, nominal
-	ExtRateSelComp    byte                 `json:"extRateSelComp"`    // 141 - Extended Rate Select Compliance
+	RateIdentifier    byte                 `json:"rateIdentifier"`    // 141 - Extended Rate Select Compliance
 	LengthSmf         common.ValueKm       `json:"lengthSmf"`         // 142 - Length (SMF)
 	LengthOm3         common.ValueM        `json:"lengthOm3"`         // 143 - Length (OM3 50 um)
 	LengthOm2         common.ValueM        `json:"lengthOm2"`         // 144 - Length (OM2 50 um)
 	LengthOm1         common.ValueM        `json:"lengthOm1"`         // 145 - Length (OM1 62.5 um) or Copper Cable Attenuation
-	LengthCopr        common.ValueM        `json:"lengthCopr"`        // 146 - Length (passive copper or active cable or OM4 50 um)
+	LengthCopper      common.ValueM        `json:"lengthCopper"`      // 146 - Length (passive copper or active cable or OM4 50 um)
 	DevTech           byte                 `json:"devTech"`           // 147 - Device technology
 	Vendor            common.String16      `json:"vendor"`            // 148-163 - Vendor name
 	ExtModule         byte                 `json:"extModule"`         // 164 - Extended Module
@@ -50,10 +51,6 @@ func New(eeprom []byte) (*Sff8636, error) {
 	return (*Sff8636)(unsafe.Pointer(&eeprom[128])), nil
 }
 
-func (s *Sff8636) String() string {
-	return ""
-}
-
 func (s *Sff8636) JSON() []byte {
 	b, _ := json.Marshal(s)
 	return b
@@ -62,4 +59,27 @@ func (s *Sff8636) JSON() []byte {
 func (s *Sff8636) JSONPretty() []byte {
 	b, _ := json.MarshalIndent(s, "", "  ")
 	return b
+}
+
+func (s *Sff8636) String() string {
+	return fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Identifier", byte(s.Identifier), s.Identifier) +
+		fmt.Sprintf("%-50s : 0x%02x\n", "Extended Identifier", byte(s.ExtIdentifier)) +
+		fmt.Sprintf("%-50s : %s\n", "Extended Identifier Description", strings.Join(s.ExtIdentifier.List(), fmt.Sprintf("\n%-50s : ", " "))) +
+		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Connector", byte(s.ConnectorType), s.ConnectorType) +
+		fmt.Sprintf("%-50s : 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\n", "Transceiver Codes", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]) +
+		fmt.Sprintf("%-50s : %s\n", "Transceiver Type", strings.Join(s.Transceiver.List(), fmt.Sprintf("\n%-50s : ", " "))) +
+		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Encoding", byte(s.Encoding), s.Encoding) +
+		fmt.Sprintf("%-50s : %s\n", "BR, Nominal", s.BrNominal) +
+		fmt.Sprintf("%-50s : 0x%02x\n", "Rate Identifier", s.RateIdentifier) +
+		fmt.Sprintf("%-50s : %s\n", "Length (SMF)", s.LengthSmf) +
+		fmt.Sprintf("%-50s : %s\n", "Length (OM3 50um)", s.LengthOm3) +
+		fmt.Sprintf("%-50s : %s\n", "Length (OM2 50um)", s.LengthOm2) +
+		fmt.Sprintf("%-50s : %s\n", "Length (OM1 62.5um)", s.LengthOm1) +
+		fmt.Sprintf("%-50s : %s\n", "Length (Copper or Active cable)", s.LengthCopper) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor", s.Vendor) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor OUI", s.VendorOui) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor PN", s.VendorPn) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor Rev", s.VendorRev) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor SN", s.VendorSn) +
+		fmt.Sprintf("%-50s : %s\n", "Date Code", s.DateCode)
 }
