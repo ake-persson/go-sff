@@ -9,6 +9,8 @@ import (
 	"github.com/mickep76/go-sff/common"
 )
 
+// 93 High Pwr Mode
+
 type Sff8636 struct {
 	Identifier        common.Identifier    `json:"identifier"`        // 128 - Identifier
 	ExtIdentifier     ExtIdentifier        `json:"extIdentifier"`     // 129 - Ext. Identifier
