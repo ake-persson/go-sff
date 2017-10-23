@@ -164,8 +164,8 @@ func (t Transceiver) String() string {
 
 func (t Transceiver) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"names": t.List(),
-		"hex":   hex.EncodeToString(t[:8]),
+		"values": t.List(),
+		"hex":    hex.EncodeToString(t[:8]),
 	}
 	return json.Marshal(m)
 }

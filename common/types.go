@@ -9,8 +9,8 @@ import (
 
 func stringToJSON(b []byte) ([]byte, error) {
 	m := map[string]interface{}{
-		"name": string(b),
-		"hex":  hex.EncodeToString(b),
+		"value": string(b),
+		"hex":   hex.EncodeToString(b),
 	}
 	return json.Marshal(m)
 }
@@ -102,8 +102,8 @@ func (v VendorOUI) String() string {
 
 func (v VendorOUI) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"name": v.String(),
-		"hex":  hex.EncodeToString([]byte(v[:3])),
+		"value": v.String(),
+		"hex":   hex.EncodeToString([]byte(v[:3])),
 	}
 	return json.Marshal(m)
 }
@@ -116,8 +116,8 @@ func (d DateCode) String() string {
 
 func (d DateCode) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"name": d.String(),
-		"hex":  hex.EncodeToString([]byte(d[:8])),
+		"value": d.String(),
+		"hex":   hex.EncodeToString([]byte(d[:8])),
 	}
 	return json.Marshal(m)
 }

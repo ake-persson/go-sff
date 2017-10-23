@@ -28,8 +28,8 @@ func (p PwrMode) String() string {
 
 func (p PwrMode) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"name": p.String(),
-		"hex":  hex.EncodeToString([]byte{byte(p)}),
+		"value": p.String(),
+		"hex":   hex.EncodeToString([]byte{byte(p)}),
 	}
 	return json.Marshal(m)
 }

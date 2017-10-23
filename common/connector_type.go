@@ -61,8 +61,8 @@ func (c ConnectorType) String() string {
 
 func (c ConnectorType) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"name": c.String(),
-		"hex":  hex.EncodeToString([]byte{byte(c)}),
+		"value": c.String(),
+		"hex":   hex.EncodeToString([]byte{byte(c)}),
 	}
 	return json.Marshal(m)
 }

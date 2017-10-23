@@ -86,8 +86,8 @@ func (e ExtIdentifier) String() string {
 func (e ExtIdentifier) MarshalJSON() ([]byte, error) {
 	b := byte(e)
 	m := map[string]interface{}{
-		"names": e.List(),
-		"hex":   hex.EncodeToString([]byte{b}),
+		"values": e.List(),
+		"hex":    hex.EncodeToString([]byte{b}),
 	}
 	return json.Marshal(m)
 }

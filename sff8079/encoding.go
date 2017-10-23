@@ -41,8 +41,8 @@ func (e Encoding) String() string {
 
 func (e Encoding) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"name": e.String(),
-		"hex":  hex.EncodeToString([]byte{byte(e)}),
+		"value": e.String(),
+		"hex":   hex.EncodeToString([]byte{byte(e)}),
 	}
 	return json.Marshal(m)
 }

@@ -72,8 +72,8 @@ func (i Identifier) String() string {
 func (i Identifier) MarshalJSON() ([]byte, error) {
 	b := []byte{byte(i)}
 	m := map[string]interface{}{
-		"name": i.String(),
-		"hex":  hex.EncodeToString(b),
+		"value": i.String(),
+		"hex":   hex.EncodeToString(b),
 	}
 	return json.Marshal(m)
 }

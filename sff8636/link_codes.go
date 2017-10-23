@@ -71,8 +71,8 @@ func (l LinkCodes) String() string {
 
 func (l LinkCodes) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"name": l.String(),
-		"hex":  hex.EncodeToString([]byte{byte(l)}),
+		"value": l.String(),
+		"hex":   hex.EncodeToString([]byte{byte(l)}),
 	}
 	return json.Marshal(m)
 }
