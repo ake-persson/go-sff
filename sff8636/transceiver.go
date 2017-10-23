@@ -142,12 +142,12 @@ var names = map[uint64]string{
 	FcTransMediaM5:    "FC: Multimode, 50m (M5)",
 	FcTransMediaOm3:   "FC: Multimode, 50um (OM3)",
 	FcTransMediaSm:    "FC: Single Mode (SM)",
-	FcSpeed1200Mbps:   "FC: 1200 MBytes/sec",
-	FcSpeed800Mbps:    "FC: 800 MBytes/sec",
-	FcSpeed1600Mbps:   "FC: 1600 MBytes/sec",
-	FcSpeed400Mbps:    "FC: 400 MBytes/sec",
-	FcSpeed200Mbps:    "FC: 200 MBytes/sec",
-	FcSpeed100Mbps:    "FC: 100 MBytes/sec",
+	FcSpeed1200Mbps:   "FC: 1200 Mb/s",
+	FcSpeed800Mbps:    "FC: 800 Mb/s",
+	FcSpeed1600Mbps:   "FC: 1600 Mb/s",
+	FcSpeed400Mbps:    "FC: 400 Mb/s",
+	FcSpeed200Mbps:    "FC: 200 Mb/s",
+	FcSpeed100Mbps:    "FC: 100 Mb/s",
 }
 
 type uint64arr []uint64
