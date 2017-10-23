@@ -52,29 +52,29 @@ func New(eeprom []byte) (*Sff8079, error) {
 }
 
 func (s *Sff8079) String() string {
-	return fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Identifier", byte(s.Identifier), s.Identifier) +
-		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Extended Identifier", byte(s.ExtIdentifier), s.ExtIdentifier) +
-		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Connector", byte(s.ConnectorType), s.ConnectorType) +
-		fmt.Sprintf("%-50s : 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\n", "Transceiver Codes", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]) +
+	return fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Identifier [0]", byte(s.Identifier), s.Identifier) +
+		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Extended Identifier [1]", byte(s.ExtIdentifier), s.ExtIdentifier) +
+		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Connector [2]", byte(s.ConnectorType), s.ConnectorType) +
+		fmt.Sprintf("%-50s : 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\n", "Transceiver Codes [3-10]", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]) +
 		fmt.Sprintf("%-50s : %s\n", "Transceiver Type", strings.Join(s.Transceiver.List(), fmt.Sprintf("\n%-50s : ", " "))) +
-		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Encoding", byte(s.Encoding), s.Encoding) +
-		fmt.Sprintf("%-50s : %s\n", "BR, Nominal", s.BrNominal) +
-		fmt.Sprintf("%-50s : 0x%02x\n", "Rate Identifier", s.RateIdentifier) +
-		fmt.Sprintf("%-50s : %s\n", "Length (SMF)", s.LengthSmfKm.String()) +
-		fmt.Sprintf("%-50s : %s\n", "Length (SMF)", s.LengthSmfM) +
-		fmt.Sprintf("%-50s : %s\n", "Length (50um)", s.Length50umM) +
-		fmt.Sprintf("%-50s : %s\n", "Length (62.5um)", s.Length625umM) +
-		fmt.Sprintf("%-50s : %s\n", "Length (Copper)", s.LengthCopper) +
-		fmt.Sprintf("%-50s : %s\n", "Length (OM3)", s.LengthOm3) +
-		fmt.Sprintf("%-50s : %s\n", "Vendor", s.Vendor) +
-		fmt.Sprintf("%-50s : %s\n", "Vendor OUI", s.VendorOui) +
-		fmt.Sprintf("%-50s : %s\n", "Vendor PN", s.VendorPn) +
-		fmt.Sprintf("%-50s : %s\n", "Vendor Rev", s.VendorRev) +
-		fmt.Sprintf("%-50s : 0x%02x 0x%02x\n", "Option Values", s.Options[0], s.Options[1]) +
-		fmt.Sprintf("%-50s : %s\n", "BR Margin, Max", s.BrMax) +
-		fmt.Sprintf("%-50s : %s\n", "BR Margin, Min", s.BrMin) +
-		fmt.Sprintf("%-50s : %s\n", "Vendor SN", s.VendorSn) +
-		fmt.Sprintf("%-50s : %s\n", "Date Code", s.DateCode)
+		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Encoding [11]", byte(s.Encoding), s.Encoding) +
+		fmt.Sprintf("%-50s : %s\n", "BR, Nominal [12]", s.BrNominal) +
+		fmt.Sprintf("%-50s : 0x%02x\n", "Rate Identifier [13]", s.RateIdentifier) +
+		fmt.Sprintf("%-50s : %s\n", "Length (SMF) [14]", s.LengthSmfKm.String()) +
+		fmt.Sprintf("%-50s : %s\n", "Length (SMF) [15]", s.LengthSmfM) +
+		fmt.Sprintf("%-50s : %s\n", "Length (50um) [16]", s.Length50umM) +
+		fmt.Sprintf("%-50s : %s\n", "Length (62.5um) [17]", s.Length625umM) +
+		fmt.Sprintf("%-50s : %s\n", "Length (Copper) [18]", s.LengthCopper) +
+		fmt.Sprintf("%-50s : %s\n", "Length (OM3) [19]", s.LengthOm3) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor [20-35]", s.Vendor) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor OUI [37-39]", s.VendorOui) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor PN [40-55]", s.VendorPn) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor Rev [56-59]", s.VendorRev) +
+		fmt.Sprintf("%-50s : 0x%02x 0x%02x\n", "Option Values [64-65]", s.Options[0], s.Options[1]) +
+		fmt.Sprintf("%-50s : %s\n", "BR Margin, Max [66]", s.BrMax) +
+		fmt.Sprintf("%-50s : %s\n", "BR Margin, Min [67]", s.BrMin) +
+		fmt.Sprintf("%-50s : %s\n", "Vendor SN [68-83]", s.VendorSn) +
+		fmt.Sprintf("%-50s : %s\n", "Date Code [84-91]", s.DateCode)
 }
 
 func (s *Sff8079) JSON() []byte {

@@ -68,7 +68,7 @@ const (
 	Fc100MbPerSec       = (1 << (0 + 56))
 )
 
-var names = map[uint64]string{
+var transceiverNames = map[uint64]string{
 	Ether10gBaseEr:      "10G Ethernet: 10G Base-ER [SFF-8472 rev10.4 only]",
 	Ether10gBaseLrm:     "10G Ethernet: 10G Base-LRM",
 	Ether10gBaeLr:       "10G Ethernet: 10G Base-LR",
@@ -140,14 +140,14 @@ func (t Transceiver) List() []string {
 	r := []string{}
 
 	keys := uint64arr{}
-	for k := range names {
+	for k := range transceiverNames {
 		keys = append(keys, k)
 	}
 	sort.Sort(keys)
 
 	for _, k := range keys {
 		if k&t.Uint64() != 0 {
-			r = append(r, names[k])
+			r = append(r, transceiverNames[k])
 		}
 	}
 
