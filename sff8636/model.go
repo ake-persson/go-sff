@@ -17,7 +17,7 @@ type Sff8636 struct {
 	ConnectorType     common.ConnectorType `json:"connectorType"`     // 130 - Connector Type
 	Transceiver       Transceiver          `json:"transceiver"`       // 131-138 - Specification Compliance
 	Encoding          Encoding             `json:"encoding"`          // 139 - Encoding
-	BrNominal         common.ValueMBps     `json:"brNominal"`         // 140 - BR, nominal
+	BrNominal         common.Value100Mbps  `json:"brNominal"`         // 140 - BR, nominal
 	RateIdentifier    byte                 `json:"rateIdentifier"`    // 141 - Extended Rate Select Compliance
 	LengthSmf         common.ValueKm       `json:"lengthSmf"`         // 142 - Length (SMF)
 	LengthOm3         common.ValueM        `json:"lengthOm3"`         // 143 - Length (OM3 50 um)
