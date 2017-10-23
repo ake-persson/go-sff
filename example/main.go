@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -15,6 +16,9 @@ import (
 )
 
 func main() {
+	printAsJSON := flag.Bool("json", false, "Print output as JSON")
+	flag.Parse()
+
 	var b []byte
 	if !terminal.IsTerminal(0) {
 		b, _ = ioutil.ReadAll(os.Stdin)
@@ -30,10 +34,20 @@ func main() {
 	switch sff.GetType(eeprom) {
 	case sff.TypeSff8079:
 		m, _ := sff8079.New(eeprom)
-		fmt.Printf("%s\n", m)
+
+		if *printAsJSON {
+			fmt.Printf("%s\n", m.JSONPretty())
+		} else {
+			fmt.Printf("%s\n", m)
+		}
 	case sff.TypeSff8636:
 		m, _ := sff8636.New(eeprom)
-		fmt.Printf("%s\n", m)
+
+		if *printAsJSON {
+			fmt.Printf("%s\n", m.JSONPretty())
+		} else {
+			fmt.Printf("%s\n", m)
+		}
 	default:
 		log.Fatal("unknown eeprom type")
 	}
