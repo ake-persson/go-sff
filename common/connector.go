@@ -14,7 +14,7 @@ const (
 	ConnectorFcCoax      = 0x05
 	ConnectorFiberJack   = 0x06
 	ConnectorLc          = 0x07
-	ConnectorMtrj        = 0x08
+	ConnectorMtRj        = 0x08
 	ConnectorMu          = 0x09
 	ConnectorSg          = 0x0A
 	ConnectorOptPtail    = 0x0B
