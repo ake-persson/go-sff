@@ -79,7 +79,6 @@ func (c *Connector) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	v := Connector(b[0])
-	c = &v
+	*c = Connector(b[0])
 	return nil
 }

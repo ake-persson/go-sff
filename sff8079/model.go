@@ -1,7 +1,6 @@
 package sff8079
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/mickep76/go-sff/common"
 	"strings"
@@ -75,14 +74,4 @@ func (s *Sff8079) String() string {
 		fmt.Sprintf("%-50s : %s\n", "BR Margin, Min [67]", s.BrMin) +
 		fmt.Sprintf("%-50s : %s\n", "Vendor SN [68-83]", s.VendorSn) +
 		fmt.Sprintf("%-50s : %s\n", "Date Code [84-91]", s.DateCode)
-}
-
-func (s *Sff8079) JSON() []byte {
-	b, _ := json.Marshal(s)
-	return b
-}
-
-func (s *Sff8079) JSONPretty() []byte {
-	b, _ := json.MarshalIndent(s, "", "  ")
-	return b
 }

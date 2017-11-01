@@ -43,11 +43,10 @@ func (s *String2) UnmarshalJSON(in []byte) error {
 		return fmt.Errorf("length is shorter then String2 type")
 	}
 
-	v := String2{}
+	*s = String2{}
 	for i := 0; i < 2; i++ {
-		v[i] = b[i]
+		s[i] = b[i]
 	}
-	s = &v
 	return nil
 }
 
@@ -75,11 +74,10 @@ func (s *String4) UnmarshalJSON(in []byte) error {
 		return fmt.Errorf("length is shorter then String4 type")
 	}
 
-	v := String4{}
+	*s = String4{}
 	for i := 0; i < 4; i++ {
-		v[i] = b[i]
+		s[i] = b[i]
 	}
-	s = &v
 	return nil
 }
 
@@ -107,11 +105,10 @@ func (s *String16) UnmarshalJSON(in []byte) error {
 		return fmt.Errorf("length is shorter then String16 type")
 	}
 
-	v := String16{}
+	*s = String16{}
 	for i := 0; i < 16; i++ {
-		v[i] = b[i]
+		s[i] = b[i]
 	}
-	s = &v
 	return nil
 }
 
@@ -149,8 +146,7 @@ func (v *ValueM) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	val := ValueM(b[0])
-	v = &val
+	*v = ValueM(b[0])
 	return nil
 }
 
@@ -162,7 +158,7 @@ func (v ValueKm) MarshalJSON() ([]byte, error) {
 	return valueToJSON(byte(v), "km")
 }
 
-func (i *ValueKm) UnmarshalJSON(in []byte) error {
+func (v *ValueKm) UnmarshalJSON(in []byte) error {
 	m := map[string]interface{}{}
 	err := json.Unmarshal(in, &m)
 	if err != nil {
@@ -174,8 +170,7 @@ func (i *ValueKm) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	val := ValueKm(b[0])
-	i = &val
+	*v = ValueKm(b[0])
 	return nil
 }
 
@@ -192,7 +187,7 @@ func (v Value100Mbps) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m)
 }
 
-func (i *Value100Mbps) UnmarshalJSON(in []byte) error {
+func (v *Value100Mbps) UnmarshalJSON(in []byte) error {
 	m := map[string]interface{}{}
 	err := json.Unmarshal(in, &m)
 	if err != nil {
@@ -204,8 +199,7 @@ func (i *Value100Mbps) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	val := Value100Mbps(b[0])
-	i = &val
+	*v = Value100Mbps(b[0])
 	return nil
 }
 
@@ -217,7 +211,7 @@ func (v ValuePerc) MarshalJSON() ([]byte, error) {
 	return valueToJSON(byte(v), "%")
 }
 
-func (i *ValuePerc) UnmarshalJSON(in []byte) error {
+func (v *ValuePerc) UnmarshalJSON(in []byte) error {
 	m := map[string]interface{}{}
 	err := json.Unmarshal(in, &m)
 	if err != nil {
@@ -229,8 +223,7 @@ func (i *ValuePerc) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	val := ValuePerc(b[0])
-	i = &val
+	*v = ValuePerc(b[0])
 	return nil
 }
 
@@ -264,11 +257,10 @@ func (v *VendorOUI) UnmarshalJSON(in []byte) error {
 		return fmt.Errorf("length is shorter then VendorOUI type")
 	}
 
-	val := VendorOUI{}
+	*v = VendorOUI{}
 	for i := 0; i < 2; i++ {
-		val[i] = b[i]
+		v[i] = b[i]
 	}
-	v = &val
 	return nil
 }
 
@@ -302,10 +294,9 @@ func (d *DateCode) UnmarshalJSON(in []byte) error {
 		return fmt.Errorf("length is shorter then DateCode type")
 	}
 
-	v := DateCode{}
+	*d = DateCode{}
 	for i := 0; i < 8; i++ {
-		v[i] = b[i]
+		d[i] = b[i]
 	}
-	d = &v
 	return nil
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -10,13 +11,12 @@ import (
 	"strings"
 
 	"github.com/mickep76/go-sff"
-	"github.com/mickep76/go-sff/sff8079"
-	"github.com/mickep76/go-sff/sff8636"
 	"golang.org/x/crypto/ssh/terminal"
 )
 
 func main() {
 	printAsJSON := flag.Bool("json", false, "Print output as JSON")
+	fromJSON := flag.Bool("from-json", false, "Decode from JSON")
 	flag.Parse()
 
 	var b []byte
@@ -26,29 +26,30 @@ func main() {
 		log.Fatalf("stdin is hungry, feed me")
 	}
 
+	if *fromJSON {
+		m := sff.Module{}
+		err := json.Unmarshal(b, &m)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%s\n", m)
+		return
+	}
+
 	eeprom, err := hex.DecodeString(strings.TrimRight(string(b), "\n"))
 	if err != nil {
 		log.Fatalf("decode hex: %v", err)
 	}
 
-	switch sff.GetType(eeprom) {
-	case sff.TypeSff8079:
-		m, _ := sff8079.New(eeprom)
+	m, err := sff.New(eeprom)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		if *printAsJSON {
-			fmt.Printf("%s\n", m.JSONPretty())
-		} else {
-			fmt.Printf("%s\n", m)
-		}
-	case sff.TypeSff8636:
-		m, _ := sff8636.New(eeprom)
-
-		if *printAsJSON {
-			fmt.Printf("%s\n", m.JSONPretty())
-		} else {
-			fmt.Printf("%s\n", m)
-		}
-	default:
-		log.Fatal("unknown eeprom type")
+	if *printAsJSON {
+		b, _ := json.MarshalIndent(m, "", "  ")
+		fmt.Printf("%s\n", string(b))
+	} else {
+		fmt.Printf("%s\n", m.String())
 	}
 }

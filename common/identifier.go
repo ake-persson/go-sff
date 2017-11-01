@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/hex"
 	"encoding/json"
+	"log"
 )
 
 const (
@@ -85,12 +86,13 @@ func (i *Identifier) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
+	log.Printf("map: %v", m)
+
 	b, err := hex.DecodeString(m["hex"].(string))
 	if err != nil {
 		return err
 	}
 
-	v := Identifier(b[0])
-	i = &v
+	*i = Identifier(b[0])
 	return nil
 }

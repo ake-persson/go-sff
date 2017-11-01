@@ -187,10 +187,9 @@ func (t *Transceiver) UnmarshalJSON(in []byte) error {
 		return fmt.Errorf("length is shorter then Transceiver type")
 	}
 
-	v := Transceiver{}
+	*t = Transceiver{}
 	for i := 0; i < 8; i++ {
-		v[i] = b[i]
+		t[i] = b[i]
 	}
-	t = &v
 	return nil
 }

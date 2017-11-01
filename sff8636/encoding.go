@@ -59,7 +59,6 @@ func (e *Encoding) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	v := Encoding(b[0])
-	e = &v
+	*e = Encoding(b[0])
 	return nil
 }

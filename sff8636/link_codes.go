@@ -89,7 +89,6 @@ func (l *LinkCodes) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	v := LinkCodes(b[0])
-	l = &v
+	*l = LinkCodes(b[0])
 	return nil
 }

@@ -1,7 +1,6 @@
 package sff8636
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"unsafe"
@@ -49,16 +48,6 @@ func New(eeprom []byte) (*Sff8636, error) {
 	}
 
 	return (*Sff8636)(unsafe.Pointer(&eeprom[128])), nil
-}
-
-func (s *Sff8636) JSON() []byte {
-	b, _ := json.Marshal(s)
-	return b
-}
-
-func (s *Sff8636) JSONPretty() []byte {
-	b, _ := json.MarshalIndent(s, "", "  ")
-	return b
 }
 
 func (s *Sff8636) String() string {

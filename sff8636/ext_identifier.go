@@ -104,7 +104,6 @@ func (e *ExtIdentifier) UnmarshalJSON(in []byte) error {
 		return err
 	}
 
-	v := ExtIdentifier(b[0])
-	e = &v
+	*e = ExtIdentifier(b[0])
 	return nil
 }
