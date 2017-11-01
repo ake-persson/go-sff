@@ -77,3 +77,20 @@ func (i Identifier) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(m)
 }
+
+func (i *Identifier) UnmarshalJSON(in []byte) error {
+	m := map[string]interface{}{}
+	err := json.Unmarshal(in, &m)
+	if err != nil {
+		return err
+	}
+
+	b, err := hex.DecodeString(m["hex"].(string))
+	if err != nil {
+		return err
+	}
+
+	v := Identifier(b[0])
+	i = &v
+	return nil
+}

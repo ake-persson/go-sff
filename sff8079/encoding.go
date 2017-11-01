@@ -46,3 +46,20 @@ func (e Encoding) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(m)
 }
+
+func (e *Encoding) UnmarshalJSON(in []byte) error {
+	m := map[string]interface{}{}
+	err := json.Unmarshal(in, &m)
+	if err != nil {
+		return err
+	}
+
+	b, err := hex.DecodeString(m["hex"].(string))
+	if err != nil {
+		return err
+	}
+
+	v := Encoding(b[0])
+	e = &v
+	return nil
+}

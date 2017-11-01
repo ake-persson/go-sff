@@ -66,3 +66,20 @@ func (c Connector) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(m)
 }
+
+func (c *Connector) UnmarshalJSON(in []byte) error {
+	m := map[string]interface{}{}
+	err := json.Unmarshal(in, &m)
+	if err != nil {
+		return err
+	}
+
+	b, err := hex.DecodeString(m["hex"].(string))
+	if err != nil {
+		return err
+	}
+
+	v := Connector(b[0])
+	c = &v
+	return nil
+}

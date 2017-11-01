@@ -34,3 +34,20 @@ func (e ExtIdentifier) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(m)
 }
+
+func (e *ExtIdentifier) UnmarshalJSON(in []byte) error {
+	m := map[string]interface{}{}
+	err := json.Unmarshal(in, &m)
+	if err != nil {
+		return err
+	}
+
+	b, err := hex.DecodeString(m["hex"].(string))
+	if err != nil {
+		return err
+	}
+
+	v := ExtIdentifier(b[0])
+	e = &v
+	return nil
+}

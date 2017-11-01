@@ -3,6 +3,7 @@ package sff8079
 import (
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"sort"
 	"strings"
 	"unsafe"
@@ -168,4 +169,28 @@ func (t Transceiver) MarshalJSON() ([]byte, error) {
 		"hex":    hex.EncodeToString(t[:8]),
 	}
 	return json.Marshal(m)
+}
+
+func (t *Transceiver) UnmarshalJSON(in []byte) error {
+	m := map[string]interface{}{}
+	err := json.Unmarshal(in, &m)
+	if err != nil {
+		return err
+	}
+
+	b, err := hex.DecodeString(m["hex"].(string))
+	if err != nil {
+		return err
+	}
+
+	if len(b) < 8 {
+		return fmt.Errorf("length is shorter then Transceiver type")
+	}
+
+	v := Transceiver{}
+	for i := 0; i < 8; i++ {
+		v[i] = b[i]
+	}
+	t = &v
+	return nil
 }

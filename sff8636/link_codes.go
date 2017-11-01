@@ -76,3 +76,20 @@ func (l LinkCodes) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(m)
 }
+
+func (l *LinkCodes) UnmarshalJSON(in []byte) error {
+	m := map[string]interface{}{}
+	err := json.Unmarshal(in, &m)
+	if err != nil {
+		return err
+	}
+
+	b, err := hex.DecodeString(m["hex"].(string))
+	if err != nil {
+		return err
+	}
+
+	v := LinkCodes(b[0])
+	l = &v
+	return nil
+}
