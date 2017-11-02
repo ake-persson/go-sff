@@ -15,8 +15,8 @@ import (
 )
 
 func main() {
-	printAsJSON := flag.Bool("json", false, "Print output as JSON")
-	fromJSON := flag.Bool("from-json", false, "Decode from JSON")
+	toJSON := flag.Bool("to-json", false, "Output as JSON")
+	fromJSON := flag.Bool("from-json", false, "Input from JSON")
 	flag.Parse()
 
 	var b []byte
@@ -27,12 +27,18 @@ func main() {
 	}
 
 	if *fromJSON {
-		m := sff.Module{}
-		err := json.Unmarshal(b, &m)
+		m := &sff.Module{}
+		err := json.Unmarshal(b, m)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("%s\n", m)
+
+		if *toJSON {
+			b, _ := json.MarshalIndent(m, "", "  ")
+			fmt.Printf("%s\n", string(b))
+		} else {
+			fmt.Printf("%s\n", m.String())
+		}
 		return
 	}
 
@@ -46,7 +52,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if *printAsJSON {
+	if *toJSON {
 		b, _ := json.MarshalIndent(m, "", "  ")
 		fmt.Printf("%s\n", string(b))
 	} else {

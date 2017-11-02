@@ -8,18 +8,31 @@ import (
 	"github.com/mickep76/go-sff/sff8636"
 )
 
-type Type int
+type Type string
 
 const (
-	TypeUnknown Type = iota
-	TypeSff8079
-	TypeSff8636
+	TypeUnknown = Type("Unknown")
+	TypeSff8079 = Type("SFF-8079")
+	TypeSff8636 = Type("SFF-8636")
 )
 
-type Module struct {
-	Type Type `json:"type"`
+var ErrUnknownType = errors.New("unknown type")
 
+type Module struct {
+	Type             Type `json:"type"`
+	*sff8079.Sff8079 `json:"-"`
+	*sff8636.Sff8636 `json:"-"`
+}
+
+type module Module
+
+type ModuleSff8079 struct {
+	Type Type `json:"type"`
 	*sff8079.Sff8079
+}
+
+type ModuleSff8636 struct {
+	Type Type `json:"type"`
 	*sff8636.Sff8636
 }
 
@@ -36,30 +49,39 @@ func (m *Module) String() string {
 func (m *Module) MarshalJSON() ([]byte, error) {
 	switch m.Type {
 	case TypeSff8079:
-		return json.Marshal(m.Sff8079)
+		return json.Marshal(ModuleSff8079{Type: m.Type, Sff8079: m.Sff8079})
 	case TypeSff8636:
-		return json.Marshal(m.Sff8636)
+		return json.Marshal(ModuleSff8636{Type: m.Type, Sff8636: m.Sff8636})
 	}
-	return nil, errors.New("unknown type")
+	return nil, ErrUnknownType
 }
 
-/*
-func (e *Encoding) UnmarshalJSON(in []byte) error {
-	m := map[string]interface{}{}
-	err := json.Unmarshal(in, &m)
+func (m *Module) UnmarshalJSON(in []byte) error {
+	mod := &module{}
+	err := json.Unmarshal(in, mod)
 	if err != nil {
 		return err
 	}
+	m.Type = mod.Type
 
-	b, err := hex.DecodeString(m["hex"].(string))
-	if err != nil {
-		return err
+	switch mod.Type {
+	case TypeSff8079:
+		s := &sff8079.Sff8079{}
+		if err := json.Unmarshal(in, s); err != nil {
+			return err
+		}
+		m.Sff8079 = s
+		return nil
+	case TypeSff8636:
+		s := &sff8636.Sff8636{}
+		if err := json.Unmarshal(in, s); err != nil {
+			return err
+		}
+		m.Sff8636 = s
+		return nil
 	}
-
-	*e = Encoding(b[0])
-	return nil
+	return ErrUnknownType
 }
-*/
 
 func GetType(eeprom []byte) Type {
 	switch len(eeprom) {
@@ -86,5 +108,5 @@ func New(eeprom []byte) (*Module, error) {
 		}
 		return &Module{Type: TypeSff8636, Sff8636: m}, nil
 	}
-	return nil, errors.New("unknown type")
+	return nil, ErrUnknownType
 }

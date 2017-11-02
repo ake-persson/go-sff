@@ -2,9 +2,10 @@ package sff8079
 
 import (
 	"fmt"
-	"github.com/mickep76/go-sff/common"
 	"strings"
 	"unsafe"
+
+	"github.com/mickep76/go-sff/common"
 )
 
 type Sff8079 struct {
@@ -13,7 +14,7 @@ type Sff8079 struct {
 	Connector       common.Connector    `json:"connector"`      // 2 - Connector
 	Transceiver     Transceiver         `json:"transceiver"`    // 3-10 - Transceiver
 	Encoding        Encoding            `json:"encoding"`       // 11 - Encoding
-	BrNominal       common.Value100Mbps `json:"brNominal`       // 12 - BR Nominal
+	BrNominal       common.Value100Mbps `json:"brNominal"`      // 12 - BR Nominal
 	RateIdentifier  byte                `json:"rateIdentifier"` // 13 - Rate ID
 	LengthSmfKm     common.ValueKm      `json:"lengthSmfKm"`    // 14 - Length(9μm) - km - (SMF)?
 	LengthSmfM      common.ValueM       `json:"lengthSmfM"`     // 15 - Length (9μm) - (SMF)?
@@ -23,7 +24,7 @@ type Sff8079 struct {
 	LengthOm3       common.ValueM       `json:"lengthOm3"`      // 19 - Length (50μm)
 	Vendor          common.String16     `json:"vendor"`         // 20-35 - Vendor name
 	TranscComp      byte                `json:"-"`              // 36 - Transciever
-	VendorOui       common.VendorOUI    `json:"vendorOUI"`      // 37-39 - Vendor OUI
+	VendorOui       common.VendorOUI    `json:"vendorOui"`      // 37-39 - Vendor OUI
 	VendorPn        common.String16     `json:"vendorPn"`       // 40-55 - Vendor PN
 	VendorRev       common.String4      `json:"vendorRev"`      // 56-59 - Vendor rev
 	LaserWavelength [2]byte             `json:"-"`              // 60-61 - Laser wavelength
@@ -41,6 +42,8 @@ type Sff8079 struct {
 	VendorSpec      [32]byte            `json:"-"`              // 96-127 - Vendor Specific
 	Reserved        [128]byte           `json:"-"`              // 128-255 - Reserved
 }
+
+type module Sff8079
 
 func New(eeprom []byte) (*Sff8079, error) {
 	if len(eeprom) != 256 {
