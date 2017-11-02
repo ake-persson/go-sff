@@ -43,9 +43,7 @@ type Sff8079 struct {
 	Reserved        [128]byte           `json:"-"`              // 128-255 - Reserved
 }
 
-type module Sff8079
-
-func New(eeprom []byte) (*Sff8079, error) {
+func Decode(eeprom []byte) (*Sff8079, error) {
 	if len(eeprom) != 256 {
 		return nil, fmt.Errorf("incorrect size of eeprom for SFF-8079, should be 256 got: %d", len(eeprom))
 	}

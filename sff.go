@@ -26,12 +26,12 @@ type Module struct {
 
 type module Module
 
-type ModuleSff8079 struct {
+type moduleSff8079 struct {
 	Type Type `json:"type"`
 	*sff8079.Sff8079
 }
 
-type ModuleSff8636 struct {
+type moduleSff8636 struct {
 	Type Type `json:"type"`
 	*sff8636.Sff8636
 }
@@ -49,9 +49,9 @@ func (m *Module) String() string {
 func (m *Module) MarshalJSON() ([]byte, error) {
 	switch m.Type {
 	case TypeSff8079:
-		return json.Marshal(ModuleSff8079{Type: m.Type, Sff8079: m.Sff8079})
+		return json.Marshal(moduleSff8079{Type: m.Type, Sff8079: m.Sff8079})
 	case TypeSff8636:
-		return json.Marshal(ModuleSff8636{Type: m.Type, Sff8636: m.Sff8636})
+		return json.Marshal(moduleSff8636{Type: m.Type, Sff8636: m.Sff8636})
 	}
 	return nil, ErrUnknownType
 }
@@ -93,16 +93,16 @@ func GetType(eeprom []byte) Type {
 	return TypeUnknown
 }
 
-func New(eeprom []byte) (*Module, error) {
+func Decode(eeprom []byte) (*Module, error) {
 	switch GetType(eeprom) {
 	case TypeSff8079:
-		m, err := sff8079.New(eeprom)
+		m, err := sff8079.Decode(eeprom)
 		if err != nil {
 			return nil, err
 		}
 		return &Module{Type: TypeSff8079, Sff8079: m}, nil
 	case TypeSff8636:
-		m, err := sff8636.New(eeprom)
+		m, err := sff8636.Decode(eeprom)
 		if err != nil {
 			return nil, err
 		}

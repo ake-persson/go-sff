@@ -42,9 +42,7 @@ type Sff8636 struct {
 	VendorSpec        [32]byte            `json:"-"`              // 224-255 - Vendor Specific
 }
 
-type module Sff8636
-
-func New(eeprom []byte) (*Sff8636, error) {
+func Decode(eeprom []byte) (*Sff8636, error) {
 	if len(eeprom) != 640 {
 		return nil, fmt.Errorf("incorrect size of eeprom for SFF-8636, should be 640 got: %d", len(eeprom))
 	}

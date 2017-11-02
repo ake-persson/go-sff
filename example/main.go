@@ -47,7 +47,7 @@ func main() {
 		log.Fatalf("decode hex: %v", err)
 	}
 
-	m, err := sff.New(eeprom)
+	m, err := sff.Decode(eeprom)
 	if err != nil {
 		log.Fatal(err)
 	}
