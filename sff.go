@@ -8,6 +8,7 @@ import (
 	"github.com/mickep76/go-sff/sff8636"
 )
 
+// Type of eeprom module.
 type Type string
 
 const (

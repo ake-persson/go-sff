@@ -258,7 +258,7 @@ func (v *VendorOUI) UnmarshalJSON(in []byte) error {
 	}
 
 	*v = VendorOUI{}
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 3; i++ {
 		v[i] = b[i]
 	}
 	return nil
