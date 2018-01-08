@@ -8,6 +8,17 @@ import (
 	"github.com/mickep76/go-sff/common"
 )
 
+const (
+	red     = "\x1b[31m"
+	green   = "\x1b[32m"
+	yellow  = "\x1b[33m"
+	blue    = "\x1b[34m"
+	magenta = "\x1b[35m"
+	cyan    = "\x1b[36m"
+	white   = "\x1b[37m"
+	clear   = "\x1b[0m"
+)
+
 type Sff8636 struct {
 	Identifier        common.Identifier   `json:"identifier"`     // 128 - Identifier
 	ExtIdentifier     ExtIdentifier       `json:"extIdentifier"`  // 129 - Ext. Identifier
@@ -71,4 +82,39 @@ func (s *Sff8636) String() string {
 		fmt.Sprintf("%-50s : %s\n", "Vendor Rev [184-185]", s.VendorRev) +
 		fmt.Sprintf("%-50s : %s\n", "Vendor SN [196-211]", s.VendorSn) +
 		fmt.Sprintf("%-50s : %s\n", "Date Code [212-219]", s.DateCode)
+}
+
+func strCol(k string, v string, c1 string, c2 string) string {
+	return fmt.Sprintf("%s%-50s%s : %s%s%s\n", c1, k, clear, c2, v, clear)
+}
+
+func joinStrCol(k string, l []string, c1 string, c2 string) string {
+	r := strCol(k, l[0], c1, c2)
+	for _, s := range l[1:] {
+		r += strCol("", s, c1, c2)
+	}
+	return r
+}
+
+func (s *Sff8636) StringCol() string {
+	return strCol("Identifier [128]", fmt.Sprintf("0x%02x (%s)", byte(s.Identifier), s.Identifier), cyan, green) +
+		strCol("Extended Identifier [129]", fmt.Sprintf("0x%02x", byte(s.ExtIdentifier)), cyan, green) +
+		strCol("Extended Identifier Description", strings.Join(s.ExtIdentifier.List(), fmt.Sprintf("\n%-50s : ", " ")), cyan, green) +
+		strCol("Connector [130]", fmt.Sprintf("0x%02x (%s)", byte(s.Connector), s.Connector), cyan, green) +
+		strCol("Transceiver Codes [131-138]", fmt.Sprintf("0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]), cyan, green) +
+		joinStrCol("Transceiver Type", s.Transceiver.List(), cyan, yellow) +
+		strCol("Encoding [139]", fmt.Sprintf("0x%02x (%s)", byte(s.Encoding), s.Encoding), cyan, green) +
+		strCol("BR, Nominal [140]", s.BrNominal.String(), cyan, green) +
+		strCol("Rate Identifier [141]", fmt.Sprintf("0x%02x", s.RateIdentifier), cyan, green) +
+		strCol("Length (SMF) [142]", s.LengthSmf.String(), cyan, green) +
+		strCol("Length (OM3 50um) [143]", s.LengthOm3.String(), cyan, green) +
+		strCol("Length (OM2 50um) [144]", s.LengthOm2.String(), cyan, green) +
+		strCol("Length (OM1 62.5um) [145]", s.LengthOm1.String(), cyan, green) +
+		strCol("Length (Copper or Active cable) [146]", s.LengthCopper.String(), cyan, green) +
+		strCol("Vendor [148-163]", s.Vendor.String(), cyan, green) +
+		strCol("Vendor OUI [165-167]", s.VendorOui.String(), cyan, green) +
+		strCol("Vendor PN [168-183]", s.VendorPn.String(), cyan, green) +
+		strCol("Vendor Rev [184-185]", s.VendorRev.String(), cyan, green) +
+		strCol("Vendor SN [196-211]", s.VendorSn.String(), cyan, green) +
+		strCol("Date Code [212-219]", s.DateCode.String(), cyan, green)
 }

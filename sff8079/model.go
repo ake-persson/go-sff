@@ -92,11 +92,20 @@ func strCol(k string, v string, c1 string, c2 string) string {
 	return fmt.Sprintf("%s%-50s%s : %s%s%s\n", c1, k, clear, c2, v, clear)
 }
 
+func joinStrCol(k string, l []string, c1 string, c2 string) string {
+	r := strCol(k, l[0], c1, c2)
+	for _, s := range l[1:] {
+		r += strCol("", s, c1, c2)
+	}
+	return r
+}
+
 func (s *Sff8079) StringCol() string {
 	return strCol("Identifier [0]", fmt.Sprintf("0x%02x (%s)", byte(s.Identifier), s.Identifier), cyan, green) +
 		strCol("Extended Identifier [1]", fmt.Sprintf("0x%02x (%s)", byte(s.ExtIdentifier), s.ExtIdentifier), cyan, green) +
 		strCol("Connector [2]", fmt.Sprintf("0x%02x (%s)", byte(s.Connector), s.Connector), cyan, green) +
 		strCol("Transceiver Codes [3-10]", fmt.Sprintf("0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]), cyan, green) +
+		joinStrCol("Transceiver Type", s.Transceiver.List(), cyan, yellow) +
 		strCol("Encoding [11]", fmt.Sprintf("0x%02x (%s)", byte(s.Encoding), s.Encoding), cyan, green) +
 		strCol("BR, Nominal [12]", s.BrNominal.String(), cyan, green) +
 		strCol("Rate Identifier [13]", fmt.Sprintf("0x%02x", s.RateIdentifier), cyan, green) +
@@ -115,8 +124,4 @@ func (s *Sff8079) StringCol() string {
 		strCol("BR Margin, Min [67]", s.BrMin.String(), cyan, green) +
 		strCol("Vendor SN [68-83]", s.VendorSn.String(), cyan, green) +
 		strCol("Date Code [84-91]", s.DateCode.String(), cyan, green)
-
-	/*
-		fmt.Sprintf("%s%-50s%s : %s\n", "Transceiver Type", strings.Join(s.Transceiver.List(), fmt.Sprintf("\n%-50s : ", " "))) +
-	*/
 }
