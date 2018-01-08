@@ -47,6 +47,16 @@ func (m *Module) String() string {
 	return ""
 }
 
+func (m *Module) StringCol() string {
+	switch m.Type {
+	case TypeSff8079:
+		return m.Sff8079.StringCol()
+	case TypeSff8636:
+		return m.Sff8636.StringCol()
+	}
+	return ""
+}
+
 func (m *Module) MarshalJSON() ([]byte, error) {
 	switch m.Type {
 	case TypeSff8079:
