@@ -55,11 +55,15 @@ type Sff8079 struct {
 }
 
 func Decode(eeprom []byte) (*Sff8079, error) {
-	if len(eeprom) != 256 {
-		return nil, fmt.Errorf("incorrect size of eeprom for SFF-8079, should be 256 got: %d", len(eeprom))
+	if len(eeprom) < 256 {
+		return nil, fmt.Errorf("eeprom size to small needs to be 256 bytes or larger got: %d bytes", len(eeprom))
 	}
 
-	return (*Sff8079)(unsafe.Pointer(&eeprom[0])), nil
+	if (eeprom[0] == 2 || eeprom[0] == 3) && eeprom[1] == 4 {
+		return (*Sff8079)(unsafe.Pointer(&eeprom[0])), nil
+	}
+
+	return nil, fmt.Errorf("unknown eeprom standard")
 }
 
 func (s *Sff8079) String() string {

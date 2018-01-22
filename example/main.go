@@ -47,10 +47,14 @@ func main() {
 		log.Fatalf("decode hex: %v", err)
 	}
 
+	fmt.Printf("%-51s: %d\n", "Eeprom Size", len(eeprom))
+
 	m, err := sff.Decode(eeprom)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Printf("%-51s: %s\n", "Type", m.Type)
 
 	if *toJSON {
 		b, _ := json.MarshalIndent(m, "", "  ")

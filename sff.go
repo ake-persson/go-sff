@@ -95,12 +95,14 @@ func (m *Module) UnmarshalJSON(in []byte) error {
 }
 
 func GetType(eeprom []byte) Type {
-	switch len(eeprom) {
-	case 256:
+	if (eeprom[0] == 2 || eeprom[0] == 3) && eeprom[1] == 4 {
 		return TypeSff8079
-	case 640:
+	}
+
+	if eeprom[0] == 12 || eeprom[0] == 13 || eeprom[0] == 17 {
 		return TypeSff8636
 	}
+
 	return TypeUnknown
 }
 
