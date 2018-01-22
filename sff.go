@@ -3,6 +3,7 @@ package sff
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/mickep76/go-sff/sff8079"
 	"github.com/mickep76/go-sff/sff8636"
@@ -94,24 +95,29 @@ func (m *Module) UnmarshalJSON(in []byte) error {
 	return ErrUnknownType
 }
 
-func GetType(eeprom []byte) Type {
+func GetType(eeprom []byte) (Type, error) {
+	if len(eeprom) < 256 {
+		return TypeUnknown, fmt.Errorf("eeprom size to small needs to be 256 bytes or larger got: %d bytes", len(eeprom))
+	}
+
 	if (eeprom[0] == 2 || eeprom[0] == 3) && eeprom[1] == 4 {
-		return TypeSff8079
+		return TypeSff8079, nil
 	}
 
 	if eeprom[128] == 12 || eeprom[128] == 13 || eeprom[128] == 17 {
-		return TypeSff8636
+		return TypeSff8636, nil
 	}
 
-	return TypeUnknown
+	return TypeUnknown, fmt.Errorf("eeprom unknown type")
 }
 
 func Decode(eeprom []byte) (*Module, error) {
-	if len(eeprom) < 256 {
-		return nil, fmt.Errorf("eeprom size to small needs to be 256 bytes or larger got: %d bytes", len(eeprom))
+	t, err := GetType(eeprom)
+	if err != nil {
+		return nil, err
 	}
 
-	switch GetType(eeprom) {
+	switch t {
 	case TypeSff8079:
 		m, err := sff8079.Decode(eeprom)
 		if err != nil {
