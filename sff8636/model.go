@@ -58,11 +58,11 @@ func Decode(eeprom []byte) (*Sff8636, error) {
 		return nil, fmt.Errorf("eeprom size to small needs to be 256 bytes or larger got: %d bytes", len(eeprom))
 	}
 
-	if eeprom[0] == 12 || eeprom[0] == 13 || eeprom[0] == 17 {
+	if eeprom[128] == 12 || eeprom[128] == 13 || eeprom[128] == 17 {
 		return (*Sff8636)(unsafe.Pointer(&eeprom[128])), nil
 	}
 
-	return nil, fmt.Errorf("unknown eeprom standard")
+	return nil, fmt.Errorf("unknown eeprom standard, identifier: 0x%02x", byte(eeprom[0]))
 }
 
 func (s *Sff8636) String() string {

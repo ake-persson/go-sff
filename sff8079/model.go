@@ -63,7 +63,7 @@ func Decode(eeprom []byte) (*Sff8079, error) {
 		return (*Sff8079)(unsafe.Pointer(&eeprom[0])), nil
 	}
 
-	return nil, fmt.Errorf("unknown eeprom standard")
+	return nil, fmt.Errorf("unknown eeprom standard, identifier: 0x%02x", byte(eeprom[0]))
 }
 
 func (s *Sff8079) String() string {

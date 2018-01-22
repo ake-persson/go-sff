@@ -99,7 +99,7 @@ func GetType(eeprom []byte) Type {
 		return TypeSff8079
 	}
 
-	if eeprom[0] == 12 || eeprom[0] == 13 || eeprom[0] == 17 {
+	if eeprom[128] == 12 || eeprom[128] == 13 || eeprom[128] == 17 {
 		return TypeSff8636
 	}
 
