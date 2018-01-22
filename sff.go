@@ -107,6 +107,10 @@ func GetType(eeprom []byte) Type {
 }
 
 func Decode(eeprom []byte) (*Module, error) {
+	if len(eeprom) < 256 {
+		return nil, fmt.Errorf("eeprom size to small needs to be 256 bytes or larger got: %d bytes", len(eeprom))
+	}
+
 	switch GetType(eeprom) {
 	case TypeSff8079:
 		m, err := sff8079.Decode(eeprom)
