@@ -93,6 +93,10 @@ func strCol(k string, v string, c1 string, c2 string) string {
 }
 
 func joinStrCol(k string, l []string, c1 string, c2 string) string {
+	if len(l) < 1 {
+		return ""
+	}
+
 	r := strCol(k, l[0], c1, c2)
 	for _, s := range l[1:] {
 		r += strCol("", s, c1, c2)
