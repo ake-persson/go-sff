@@ -77,7 +77,7 @@ func Decode(eeprom []byte) (*Sff8079, error) {
 }
 
 func (s *Sff8079) String() string {
-	return fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Identifier [0]", byte(s.Identifier), s.Identifier) +
+	str := fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Identifier [0]", byte(s.Identifier), s.Identifier) +
 		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Extended Identifier [1]", byte(s.ExtIdentifier), s.ExtIdentifier) +
 		fmt.Sprintf("%-50s : 0x%02x (%s)\n", "Connector [2]", byte(s.Connector), s.Connector) +
 		fmt.Sprintf("%-50s : 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\n", "Transceiver Codes [3-10]", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]) +
@@ -100,6 +100,12 @@ func (s *Sff8079) String() string {
 		fmt.Sprintf("%-50s : %s\n", "BR Margin, Min [67]", s.BrMin) +
 		fmt.Sprintf("%-50s : %s\n", "Vendor SN [68-83]", s.VendorSn) +
 		fmt.Sprintf("%-50s : %s\n", "Date Code [84-91]", s.DateCode)
+
+	if s.VendorArista != nil {
+		str += fmt.Sprintf("%-50s : %x\n", "Vendor SA [120]", s.VendorArista.VendorSa)
+	}
+
+	return str
 }
 
 func strCol(k string, v string, c1 string, c2 string) string {
@@ -119,7 +125,7 @@ func joinStrCol(k string, l []string, c1 string, c2 string) string {
 }
 
 func (s *Sff8079) StringCol() string {
-	return strCol("Identifier [0]", fmt.Sprintf("0x%02x (%s)", byte(s.Identifier), s.Identifier), cyan, green) +
+	str := strCol("Identifier [0]", fmt.Sprintf("0x%02x (%s)", byte(s.Identifier), s.Identifier), cyan, green) +
 		strCol("Extended Identifier [1]", fmt.Sprintf("0x%02x (%s)", byte(s.ExtIdentifier), s.ExtIdentifier), cyan, green) +
 		strCol("Connector [2]", fmt.Sprintf("0x%02x (%s)", byte(s.Connector), s.Connector), cyan, green) +
 		strCol("Transceiver Codes [3-10]", fmt.Sprintf("0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", s.Transceiver[0], s.Transceiver[1], s.Transceiver[2], s.Transceiver[3], s.Transceiver[4], s.Transceiver[5], s.Transceiver[6], s.Transceiver[7]), cyan, green) +
@@ -142,4 +148,10 @@ func (s *Sff8079) StringCol() string {
 		strCol("BR Margin, Min [67]", s.BrMin.String(), cyan, green) +
 		strCol("Vendor SN [68-83]", s.VendorSn.String(), cyan, green) +
 		strCol("Date Code [84-91]", s.DateCode.String(), cyan, green)
+
+	if s.VendorArista != nil {
+		str += strCol("Vendor SA [120]", fmt.Sprintf("%x", s.VendorArista.VendorSa), cyan, green)
+	}
+
+	return str
 }
