@@ -52,6 +52,12 @@ type Sff8079 struct {
 	CcExt           byte                `json:"-"`              // 95 - CC_EXT
 	VendorSpec      [32]byte            `json:"-"`              // 96-127 - Vendor Specific
 	Reserved        [128]byte           `json:"-"`              // 128-255 - Reserved
+
+	*VendorArista
+}
+
+type VendorArista struct {
+	VendorSa byte `json:"vendorSa"` // 120 Vendor SA
 }
 
 func Decode(eeprom []byte) (*Sff8079, error) {
@@ -60,7 +66,11 @@ func Decode(eeprom []byte) (*Sff8079, error) {
 	}
 
 	if (eeprom[0] == 2 || eeprom[0] == 3) && eeprom[1] == 4 {
-		return (*Sff8079)(unsafe.Pointer(&eeprom[0])), nil
+		sff := (*Sff8079)(unsafe.Pointer(&eeprom[0]))
+		if sff.Vendor.String() == "Arista Networks" && strings.HasPrefix(sff.VendorPn.String(), "CAB-Q-S-") {
+			sff.VendorArista = &VendorArista{sff.VendorSpec[24]}
+		}
+		return sff, nil
 	}
 
 	return nil, fmt.Errorf("unknown eeprom standard, identifier: 0x%02x", byte(eeprom[0]))
