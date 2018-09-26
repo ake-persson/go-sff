@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/mickep76/go-sff/common"
+	"gitlab.trading.imc.intra/go/go-sff/common"
 )
 
 const (
@@ -50,14 +50,10 @@ type Sff8079 struct {
 	EnhancedOpts    byte                `json:"-"`              // 93 - Enhanced Options
 	Sff8472Comp     byte                `json:"-"`              // 94 - SFF-8472 Compliance
 	CcExt           byte                `json:"-"`              // 95 - CC_EXT
-	VendorSpec      [32]byte            `json:"-"`              // 96-127 - Vendor Specific
+	VendorSpec1     [24]byte            `json:"-"`              // 96-119 - Vendor Specific 1
+	VendorAristaSa  byte                `json:"vendorSa"`       // 120 Vendor Arista SA
+	VendorSpec2     [7]byte             `json:"-"`              // 121-127 - Vendor Specific 2
 	Reserved        [128]byte           `json:"-"`              // 128-255 - Reserved
-
-	*VendorArista
-}
-
-type VendorArista struct {
-	VendorSa byte `json:"vendorSa"` // 120 Vendor SA
 }
 
 func Decode(eeprom []byte) (*Sff8079, error) {
@@ -67,9 +63,6 @@ func Decode(eeprom []byte) (*Sff8079, error) {
 
 	if (eeprom[0] == 2 || eeprom[0] == 3) && eeprom[1] == 4 {
 		sff := (*Sff8079)(unsafe.Pointer(&eeprom[0]))
-		if sff.Vendor.String() == "Arista Networks" && strings.HasPrefix(sff.VendorPn.String(), "CAB-Q-S-") {
-			sff.VendorArista = &VendorArista{sff.VendorSpec[24]}
-		}
 		return sff, nil
 	}
 
@@ -101,8 +94,8 @@ func (s *Sff8079) String() string {
 		fmt.Sprintf("%-50s : %s\n", "Vendor SN [68-83]", s.VendorSn) +
 		fmt.Sprintf("%-50s : %s\n", "Date Code [84-91]", s.DateCode)
 
-	if s.VendorArista != nil {
-		str += fmt.Sprintf("%-50s : %x\n", "Vendor SA [120]", s.VendorArista.VendorSa)
+	if s.Vendor.String() == "Arista Networks" && strings.HasPrefix(s.VendorPn.String(), "CAB-Q-S-") {
+		str += fmt.Sprintf("%-50s : %x\n", "Vendor SA [120]", s.VendorAristaSa)
 	}
 
 	return str
@@ -149,8 +142,8 @@ func (s *Sff8079) StringCol() string {
 		strCol("Vendor SN [68-83]", s.VendorSn.String(), cyan, green) +
 		strCol("Date Code [84-91]", s.DateCode.String(), cyan, green)
 
-	if s.VendorArista != nil {
-		str += strCol("Vendor SA [120]", fmt.Sprintf("%x", s.VendorArista.VendorSa), cyan, green)
+	if s.Vendor.String() == "Arista Networks" && strings.HasPrefix(s.VendorPn.String(), "CAB-Q-S-") {
+		str += strCol("Vendor SA [120]", fmt.Sprintf("%x", s.VendorAristaSa), cyan, green)
 	}
 
 	return str
